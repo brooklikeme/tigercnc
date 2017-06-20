@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" width="168.565" height="22.02" viewBox="0 0 666 87">
+  <defs>
+    <style>
+      .cls-1, .cls-4 {
+        fill: #000;
+      }
+
+      .cls-1 {
+        stroke: #000;
+        stroke-linejoin: round;
+        stroke-width: 8px;
+        fill-opacity: 0;
+      }
+
+      .cls-2, .cls-3 {
+        font-size: 164.557px;
+      }
+
+      .cls-3 {
+        text-anchor: end;
+        font-family: "Arial Black";
+      }
+
+      .cls-4, .cls-5 {
+        fill-rule: evenodd;
+      }
+
+      .cls-5 {
+        fill: #fff;
+        fill-opacity: 0.96;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect x="4" y="4" width="62.688" height="79" class="cls-1"/>
+    <text transform="translate(669 77) scale(0.61 0.61)" class="cls-2"><tspan class="cls-3">TIGERCNC</tspan></text>
+    <path d="M12.767,25.261 C12.767,25.261 46.849,32.857 61.743,64.832 L59.038,69.904 C59.038,69.904 5.815,52.232 10.869,25.915 L12.767,25.261 Z" class="cls-4"/>
+    <path d="M6.294,30.992 C6.294,30.992 8.118,59.396 59.136,74.747 L35.267,74.747 C35.267,74.747 2.096,61.489 4.445,37.069 L6.294,30.992 Z" class="cls-4"/>
+    <path d="M5.478,60.162 C5.478,60.162 11.981,73.053 30.435,74.747 L3.652,74.139 " class="cls-4"/>
+    <path d="M4.870,7.292 C4.870,7.292 26.737,6.261 57.915,42.119 L61.480,55.300 C61.480,55.300 23.123,11.761 3.656,21.332 " class="cls-4"/>
+    <path d="M22.475,34.282 C22.475,34.282 20.084,47.943 36.065,52.036 C36.065,52.036 44.489,54.712 48.615,50.032 L44.191,46.377 C44.191,46.377 36.896,51.689 29.350,42.557 C29.350,42.557 33.141,41.081 31.202,37.899 C31.202,37.899 26.357,34.800 22.475,34.282 Z" class="cls-5"/>
+    <path d="M20.087,4.254 C20.087,4.254 50.521,17.824 57.217,44.362 L58.435,33.423 C58.435,33.423 52.358,12.598 36.522,3.038 L20.087,4.254 Z" class="cls-4"/>
+  </g>
+</svg>

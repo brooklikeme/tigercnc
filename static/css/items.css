@@ -1,0 +1,124 @@
+.item-category-list {
+    margin-bottom: 50px
+}
+
+.item-category-list h3 {
+    margin-top: 0px;
+    margin-left: 10px;
+}
+
+#item-category {
+    border-bottom-width: 0px;
+}
+
+.item-box {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.item-img {
+    border: 1px solid #bbbbbb;
+    padding: 3px;
+    transition: border 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+}
+
+.item-img:hover {
+    border: 1px solid #3aa9a5;
+    transition: border 0.3s ease;
+}
+
+.item-name a {
+    font-size: 16px;
+}
+
+.item-name, .item-subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-subtitle span {
+    color: #aaa;
+}
+
+.item-tags {
+    position: absolute;
+    right: 0px;
+    top: -10px;
+}
+
+.item-tags span {
+    display: block;
+    border-radius: 5px;
+    width: 80px;
+    height: 25px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 25px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.item-tags .item-tag-price {
+    background-color: #4cae4c;
+    border: 1px solid #3c763d;
+}
+
+.item-tags .item-tag-featured {
+    background-color: #00BAFF;
+    border: 1px solid #0f74a8;
+}
+
+.item-top-placeholder {
+    height: 80px;
+}
+
+.item-top-fixed {
+    background-color: #fff;
+    z-index: 200;
+    width: inherit;
+}
+
+.item-top-fixed ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.item-top-fixed ul > li {
+    display: inline-block;
+}
+
+.item-top-fixed ul > li > a {
+    display: block;
+    text-decoration: none;
+}
+
+.item-top-fixed .item-sections ul > li > a {
+    font-size: 16px;
+    line-height: 28px;
+    border-bottom: 3px solid transparent;
+    padding: 12px 20px;
+}
+
+.item-top-fixed ul > li.active > a {
+    border-color: #3aa9a5
+}
+
+.item-top-fixed ul > li:hover > a {
+    color: #3aa9a5;
+}
+
+.item-sections {
+    padding-left: 0px;
+}
+
+.item-top-fixed .item-reviews ul > li > a {
+    line-height: 20px;
+}
+
+.item-top-fixed .item-reviews ul > li > a {
+}
+
+

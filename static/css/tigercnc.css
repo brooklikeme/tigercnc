@@ -1,0 +1,169 @@
+.tc-border-grey-1 {
+    border: 1px solid #eee;
+}
+
+.tc-border-top-grey-1 {
+    border-top: 1px solid #eee;
+}
+
+.tc-border-left-grey-1 {
+    border-left: 1px solid #eee;
+}
+
+.tc-border-right-grey-1 {
+    border-right: 1px solid #eee;
+}
+
+.tc-border-bottom-grey-1 {
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.tc-border-emphasis-1 {
+    border: 1px solid #3aa9a5;
+}
+
+.tc-position-left {
+    left: 0px;
+}
+
+.tc-position-right {
+    right: 0px;
+}
+
+.tc-position-top {
+    top: 0px;
+}
+
+.tc-position-bottom {
+    bottom: 0px;
+}
+
+.tc-position-absolute {
+    position: absolute;;
+}
+
+.tc-positon-relative {
+    position: relative;
+}
+
+.tc-display-block {
+    display: block;
+}
+
+.tc-display-inlineblock {
+    display: inline-block;
+}
+
+.tc-block-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tc-float-left {
+    float: left;
+}
+
+.tc-float-right {
+    float: right;
+}
+
+.tc-overflow-hidden {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tc-margin-left-0 {
+    margin-left: 0px;
+}
+
+.tc-margin-left-1 {
+    margin-left: 5px;
+}
+
+.tc-margin-left-2 {
+    margin-left: 10px;
+}
+
+.tc-margin-left-3 {
+    margin-left: 15px;
+}
+
+.tc-margin-left-4 {
+    margin-left: 20px;
+}
+
+.tc-margin-right-0 {
+    margin-right: 0px;
+}
+
+.tc-margin-right-1 {
+    margin-right: 5px;
+}
+
+.tc-margin-right-2 {
+    margin-right: 10px;
+}
+
+.tc-margin-right-3 {
+    margin-right: 15px;
+}
+
+.tc-margin-right-4 {
+    margin-right: 20px;
+}
+
+.tc-margin-top-0 {
+    margin-top: 0px;
+}
+
+.tc-margin-top-1 {
+    margin-top: 5px;
+}
+
+.tc-margin-top-2 {
+    margin-top: 10px;
+}
+
+.tc-margin-top-3 {
+    margin-top: 15px;
+}
+
+.tc-margin-top-4 {
+    margin-top: 20px;
+}
+
+.tc-margin-bottom-0 {
+    margin-bottom: 0px;
+}
+
+.tc-margin-bottom-1 {
+    margin-bottom: 5px;
+}
+
+.tc-margin-bottom-2 {
+    margin-bottom: 10px;
+}
+
+.tc-margin-bottom-3 {
+    margin-bottom: 15px;
+}
+
+.tc-margin-bottom-4 {
+    margin-bottom: 20px;
+}
+
+.tc-width-full {
+    width: 100%;
+}
+
+.tc-height-full {
+    height: 100%;
+}
+
+.tc-background-grey {
+    background-color: #eee;
+}
+
+.tc-background-dark-grey {
+    background-color: #DDDDDD;
+}

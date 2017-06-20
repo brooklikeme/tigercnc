@@ -1,0 +1,215 @@
+{% extends "base_root.html" %}
+{% load i18n staticfiles cms_tags menu_tags sekizai_tags %}
+
+{% block body_class %}tpl-base{% endblock %}
+
+{% block extend_root %}
+{% block header %}
+{# INFO: navbar concept: http://getbootstrap.com/components/#navbar #}
+<header class="navbar navbar-head js-navbar-head navbar-inverse">
+    <div class="container">
+        {# INFO: the logo should be placed first for seo reasons #}
+        <div class="navbar-header">
+            {# INFO: the logo should be placed first for seo reasons #}
+            <h1 class="navbar-brand">
+                <a href="/">
+                    <span class="sr-only">{{ request.site.name }}</span>
+                    <img src="{% static "img/tigercnc-logo.png" %}" alt="{{ request.site.name }}" />
+                </a>
+            </h1>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".js-navbar-header">
+                {% for row in 123|make_list %}<span class="icon-bar"></span>{% endfor %}
+            </button>
+        </div>
+
+        {# INFO: ensure the anchor names are callable #}
+        <h2 class="sr-only">{% trans "Shortcuts" %}</h2>
+        <ul class="skip-links">
+            <li><a href="/" title="[Alt + 0]" accesskey="0">{% trans "Go to home" %}</a></li>
+            <li><a href="#navigation" title="[Alt + 1]" accesskey="1">{% trans "Jump to navigation" %}</a></li>
+            <li><a href="#content" title="[Alt + 2]" accesskey="2">{% trans "Jump to content" %}</a></li>
+            <li><a href="#footer" title="[Alt + 3]" accesskey="3">{% trans "Contact" %}</a></li>
+        </ul>
+
+        <div class="navbar-collapse collapse js-navbar-header">
+            {% block navbar %}
+            <nav class="nav navbar-main navbar-left" id="navigation">
+                <h2 class="sr-only">{% trans "Navigation" %}</h2>
+                {% render_model_block request.current_page "changelist" %}
+                {% with dropdown="true" %}
+                <ul class="nav navbar-nav">
+                    {% show_menu 0 1 0 0 "includes/menu/navigation.html" %}
+                    <li class="divider" role="presentation"><span class="sr-only">{% trans "Separator" %}</span></li>
+                    {% show_menu_below_id "meta" 0 0 0 0 "includes/menu/navigation.html" %}
+                    {% language_chooser "includes/menu/langnav.html" "native" %}
+                </ul>
+                {% endwith %}
+                {% endrender_model_block %}
+            </nav>
+            {% endblock navbar %}
+        </div>
+    </div>
+</header>
+{% endblock header %}
+
+<!-- start: content -->
+<hr class="sr-only" />
+
+{% block breadcrumb %}
+{% if not request.current_page.is_home %}
+<!-- start: breadcrumb -->
+{# INFO: breadcrumb concept: http://getbootstrap.com/components/#breadcrumbs #}
+<nav class="navbar navbar-breadcrumb" role="navigation">
+    <h3 class="sr-only">{% trans "You are here" %}</h3>
+    <div class="container">
+        <ol class="breadcrumb">
+            {% block extend_breadcrumb %}
+            {% show_breadcrumb 0 "includes/menu/breadcrumb.html" %}
+            {% endblock extend_breadcrumb %}
+        </ol>
+    </div>
+</nav>
+<!-- end: breadcrumb -->
+{% endif %}
+{% endblock breadcrumb %}
+
+{% block messages %}
+{% if messages %}
+<!-- start: messages -->
+<div class="container">
+    {% include "includes/messages.html" %}
+</div>
+<!-- end: messages -->
+{% endif %}
+{% endblock messages %}
+
+{% block extend_base %}
+    {% block content %}{% endblock %}
+{% endblock extend_base %}
+<hr class="sr-only" />
+<!-- end: content -->
+
+{% block footer %}
+<!-- start: footer -->
+<footer class="footer ">
+  <div class="container">
+    <div class="row footer-top">
+      <div class="col-sm-12  col-lg-12">
+        <div class="row about">
+          <div class="col-xs-6">
+            <h6>入口</h6>
+            <ul class="list-unstyled">
+              <li><a href="/">首页</a></li>
+              <li><a href="/wiki/">百科</a></li>
+              <li><a href="/store/">商店</a></li>
+              <li><a href="/discovery/">发现</a></li>
+                <li><a href="/support/">支持</a></li>
+            </ul>
+          </div>
+          <div class="col-xs-6">
+            <h6>产品</h6>
+            <ul class="list-unstyled">
+              <li><a href="/store/" target="_blank">TigerCNC</a></li>
+            </ul>
+          </div>
+          <div class="col-xs-6">
+            <h6>百科</h6>
+            <ul class="list-unstyled">
+              <li><a href="/wiki/category/ru-men/" target="_blank">CNC入门</a></li>
+              <li><a href="/wiki/category/jin-jie/" target="_blank">CNC进阶</a></li>
+                <li><a href="/wiki/chang-jian-wen-ti/" target="_blank">常见问题</a></li>
+                <li><a href="/wiki/tag/jiao-cheng/" target="_blank">安装与使用</a></li>
+            </ul>
+          </div>
+          <div class="col-xs-6">
+            <h6>关于</h6>
+            <ul class="list-unstyled">
+              <li><a href="/wiki/guan-yu-wo-men/" target="_blank">关于我们</a></li>
+              <li><a href="/wiki/category/blog/" target="_blank">博客</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12  col-lg-12">
+        <div class="row contact" id="page-bottom">
+          <div class="col-xs-8">
+            <h6>公众号</h6>
+            <h6>
+              <img src="{% static "img/home/wechat_qr.png" %}" width="120px" height="120px">
+            </h6>
+          </div>
+          <div class="col-xs-8">
+            <h6>淘宝店</h6>
+            <h6>
+              <img src="{% static "img/home/taobao_qr.png" %}" width="120px" height="120px">
+            </h6>
+          </div>
+          <div class="col-xs-8">
+            <h6>QQ群</h6>
+            <h6>
+              <img src="{% static "img/home/qq_qr.png" %}" width="120px" height="120px">
+            </h6>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <div class="row footer-bottom">
+        <ul class="list-inline text-center">
+            <li><a href="http://www.miibeian.gov.cn/" target="_blank">京ICP备17014683号</a></li>
+        </ul>
+    </div>
+  </div>
+</footer>
+<!-- end: footer -->
+{% endblock footer %}
+
+{#<div class="modal modal-video" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header">#}
+{#                <button type="button" class="close" aria-hidden="true">&times;</button>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <div class="video-container">#}
+{#                   <video controls  preload="none" poster="/images/index/c6ab0954.cover.jpg" id="index-video">#}
+{#                       <source src="http://o8e1swy56.bkt.clouddn.com/OneAlertIntroduce.webm" type="video/webm">#}
+{#                       <source src="http://o8e1swy56.bkt.clouddn.com/OneAlertIntroduce.mp4" type="video/mp4">#}
+{#                   </video>#}
+{#                </div><!--//video-container-->#}
+{#            </div><!--//modal-body-->#}
+{#        </div><!--//modal-content-->#}
+{#    </div><!--//modal-dialog-->#}
+{#</div><!--//modal-->#}
+
+
+
+ {##}
+{#<!-- Modal -->#}
+{#<div class="modal modal-video bs-example-modal-lg" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">#}
+{#  <div class="modal-dialog" role="document">#}
+{#    <div class="modal-content">#}
+{#      <div class="modal-header">#}
+{#        <button type="button" class="close" aria-hidden="true" data-dismiss="modal" aria-label="Close">&times;</button>#}
+{#      </div>#}
+{#      <div class="modal-body">#}
+{#        <div class="video-container">#}
+{#           <video controls  preload="true" poster="/images/index/c6ab0954.cover.jpg" id="index-video">#}
+{#               <source src="http://o8e1swy56.bkt.clouddn.com/OneAlertIntroduce.webm" type="video/webm">#}
+{#               <source src="http://o8e1swy56.bkt.clouddn.com/OneAlertIntroduce.mp4" type="video/mp4">#}
+{#           </video>#}
+{#        </div><!--//video-container-->#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+{% addtoblock "js" %}<script src="{% static 'js/addons/cl.explorer.js' %}"></script>{% endaddtoblock %}
+
+
+{% endblock extend_root %}
+
+
+
