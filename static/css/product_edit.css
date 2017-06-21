@@ -40,6 +40,8 @@
 .folder-options {
     line-height: 45px;
     height: 45px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .folder-option-upload span {
@@ -52,17 +54,14 @@
     display: inline-block;
 }
 
-.image-selector-right {
-    margin-left: 150px;
-    height: 400px;
-}
-
 .modal-title {
     line-height: 1.2;
 }
 
 .image-list {
     padding: 10px;
+    height: auto;
+    position: relative;
 }
 
 .image-item {
@@ -106,7 +105,7 @@
     z-index: 1000;
     display: none;
     float: left;
-    min-width: 160px;
+    min-width: 120px;
     padding: 5px 0;
     margin: 2px 0 0;
     font-size: 14px;
@@ -260,6 +259,20 @@
     width: 2000px;
 }
 
+.image-selector-right {
+    margin-left: 150px;
+}
+
+.image-list-container {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 350px;
+}
+
+.image-list-pagination {
+    height: 45px;
+}
+
 #sortable {
     list-style-type: none;
     margin: 0;
@@ -277,4 +290,43 @@
 }
 
 .ui-state-highlight {
+}
+
+.image-select-left-top {
+    height: 45px;
+}
+
+.dropdown-menu {
+    z-index: 100;
+}
+
+.list-group-item {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.list-group hr {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.image-select-left-top {
+
+}
+
+.image-select-left-top button {
+    width: 120px;
+    margin-top: 6px;
+}
+
+.folder-options .checkbox {
+    margin: 0px 10px 0px 20px;
+}
+
+.folder-options .checkbox input {
+    top: 13px;
+}
+
+.selected-image-actions {
+    padding-top: 3px;
 }

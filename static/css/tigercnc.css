@@ -167,3 +167,7 @@
 .tc-background-dark-grey {
     background-color: #DDDDDD;
 }
+
+.tc-cursor-move {
+    cursor: move;
+}
