@@ -44,6 +44,7 @@ class Product(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, null=True, blank=True)
+    thumbnail_url = models.URLField()
     purchase_url = models.URLField(null=True, blank=True)
     spec1_name = models.CharField(max_length=45)
     spec2_name = models.CharField(max_length=45, null=True, blank=True)
@@ -56,11 +57,11 @@ class Product(models.Model):
     is_deleted = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     view_count = models.IntegerField(default=0)
-    low_price = models.PositiveIntegerField(default=100)
+    low_price = models.PositiveIntegerField(default=100, db_index=True)
     high_price = models.PositiveIntegerField(default=100)
     create_time = models.DateTimeField()
-    update_time = models.DateTimeField()
-    delete_time = models.DateTimeField()
+    update_time = models.DateTimeField(db_index=True)
+    delete_time = models.DateTimeField(null=True)
     create_user = models.ForeignKey(User, related_name='create_user')
     update_user = models.ForeignKey(User, related_name='update_user')
     delete_user = models.ForeignKey(User, related_name='delete_user')
@@ -69,11 +70,6 @@ class Product(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.name)
-
-class ProductRelated(models.Model):
-    from_product = models.ForeignKey(Product, related_name='from_product')
-    to_product = models.ForeignKey(Product, related_name='to_product')
-    order = models.IntegerField()
 
 # Product related images
 class ProductImages(models.Model):

@@ -9,15 +9,20 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.static import serve
-from . import views
+from tigersite.views import *
+from rest_framework import routers
 
 admin.autodiscover()
 
+router = routers.DefaultRouter()
+router.register(r'product_categorys', ProductCategoryViewSet)
+router.register(r'products', ProductViewSet)
+
 urlpatterns = [
     # products: /product/
-    url(r'^products/$', views.ProductList, name='product_list'),
-    url(r'^products/(?P<pk>[0-9]+)/$', views.ProductDetail, name='product_detail'),
-    url(r'^product_edit/(?P<pk>[0-9]+)/$', views.ProductEdit, name='product_edit'),
+    url(r'^product_store/$', store, name='store'),
+    url(r'^products/(?P<pk>[0-9]+)/$', ProductDetail, name='product_detail'),
+    url(r'^product_edit/(?P<pk>[0-9]+)/$', ProductEdit, name='product_edit'),
 
     url(r'^sitemap\.xml$', sitemap,
         {'sitemaps': {'cmspages': CMSSitemap}}),
@@ -25,6 +30,8 @@ urlpatterns = [
     url(r'^avatar/', include('avatar.urls')),
     url(r'^profile/', include('userprofiles.urls')),
     url(r'^gallery/', include('imagestore.urls', namespace='imagestore')),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 urlpatterns += i18n_patterns(

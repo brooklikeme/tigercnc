@@ -121,4 +121,7 @@
 .item-top-fixed .item-reviews ul > li > a {
 }
 
+.item-tag-featured[is_featured="false"]{
+    display: none;
+}
 

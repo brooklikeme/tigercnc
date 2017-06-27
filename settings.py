@@ -182,6 +182,8 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'tagging',
 
+    'rest_framework',
+
     'tigersite'
 )
 
@@ -247,4 +249,19 @@ DJANGOCMS_STYLE_CHOICES = ['container', 'content', 'teaser', 'text-center', 'tex
                            'text-bottom', 'icon-center', 'section-light-gray', 'section-gray', 'section-violet']
 
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    #    'DEFAULT_PERMISSION_CLASSES': [
+    #        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    #    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.permissions.AllowAny'],
+}
+
 
