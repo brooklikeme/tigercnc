@@ -171,6 +171,7 @@ INSTALLED_APPS = (
     'aldryn_translation_tools',
     'parler',
     'sortedm2m',
+    'widget_tweaks',
     'taggit',
     'aldryn_video',
 

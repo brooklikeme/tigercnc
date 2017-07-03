@@ -102,11 +102,11 @@
     padding: 12px 20px;
 }
 
-.item-top-fixed ul > li.active > a {
+.item-top-fixed > .item-sections ul > li.active > a {
     border-color: #3aa9a5
 }
 
-.item-top-fixed ul > li:hover > a {
+.item-top-fixed > .item-sections ul > li:hover > a {
     color: #3aa9a5;
 }
 

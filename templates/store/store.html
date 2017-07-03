@@ -9,7 +9,7 @@
         <div id="item-category" class="aldryn aldryn-newsblog aldryn-newsblog-categories">
             <ul id="product-category-nav" class="list-unstyled">
                 <script type="text/template" id="product-category-nav-template">
-                    <a href="#category-<%= id %>"><%= name %></a>
+                    <a class="category-nav-link" href="#category-<%= id %>"><%= name %></a>
                 </script>
             </ul>
         </div>
@@ -25,7 +25,7 @@
         </script>
         <script type="text/template" id="product-template">
             <div class="item-img">
-                <a href="/products/<%= id %>/">
+                <a href="/items/<%= id %>/">
                     <img src="<%= thumbnail_url %>" alt="" class="img-responsive">
                 </a>
                 <div class="item-tags">
@@ -35,7 +35,7 @@
             </div>
             <div class="item-info">
                 <div class="item-name">
-                    <a href="/products/<%= id %>/">
+                    <a href="/items/<%= id %>/">
                         <%= name %>
                     </a>
                 </div>

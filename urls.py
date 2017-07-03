@@ -20,9 +20,10 @@ router.register(r'products', ProductViewSet)
 
 urlpatterns = [
     # products: /product/
-    url(r'^product_store/$', store, name='store'),
-    url(r'^products/(?P<pk>[0-9]+)/$', ProductDetail, name='product_detail'),
-    url(r'^product_edit/(?P<pk>[0-9]+)/$', ProductEdit, name='product_edit'),
+    url(r'^items/$', store, name='store'),
+    url(r'^items/(?P<pk>[0-9]+)/$', ProductDetail.as_view(), name='product_detail'),
+    url(r'^update_item/$', CreateProduct.as_view(), name='create_product'),
+    url(r'^update_item/(?P<pk>[0-9]+)/$', UpdateProduct.as_view(), name='update_product'),
 
     url(r'^sitemap\.xml$', sitemap,
         {'sitemaps': {'cmspages': CMSSitemap}}),

@@ -33,8 +33,9 @@
     -1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-.product-body textarea {
-    font-size: 14px;
+#product-body {
+    overflow: scroll;
+    max-height: 300px
 }
 
 .folder-options {
@@ -329,4 +330,38 @@
 
 .selected-image-actions {
     padding-top: 3px;
+}
+
+.sortedm2m-container .sortedm2m label {
+    display: inline-block;
+    position: relative;
+    line-height: 25px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.sortedm2m-container .selector-filter input {
+    width: calc(100% - 50px) !important;
+    margin: 5px 50px 5px 0 !important;
+    color: #333;
+    line-height: 24px;
+    height: 36px;
+    min-height: 24px;
+    padding: 6px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 3px;
+    outline: 0;
+}
+
+.sortedm2m-container .selector-filter {
+    position: relative;
+}
+
+.sortedm2m-container .selector-filter img {
+    position: absolute;
+    right: 0;
+    margin: 5px 0;
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 2;
+    order: 2;
 }

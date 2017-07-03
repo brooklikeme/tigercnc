@@ -2,6 +2,8 @@
  * Created by josh on 17/6/16.
  */
 $(document).ready(function () {
+    var lastActiveNavID = "";
+
     var move = function () {
         var b = $(window).scrollTop();
         var d = $("#scroller-anchor").offset().top;
@@ -13,9 +15,46 @@ $(document).ready(function () {
                 c.css({position: "relative", top: ""})
             }
         }
+        // active nav
+        var categoryLists = [];
+        $(".item-category-list").each(function () {
+            categoryLists.push({
+                id: $(this).attr("id"),
+                top: $(this).offset().top
+            });
+        });
+
+        var areaTop;
+        var areaBottom;
+        for (var i = 0; i < categoryLists.length; i++) {
+            areaTop = i == 0 ? 0 : categoryLists[i].top - 80;
+            areaBottom = i == categoryLists.length - 1 ? 10000 : categoryLists[i + 1].top - 80;
+            if (b >= areaTop && b < areaBottom) {
+                if (lastActiveNavID != categoryLists[i].id) {
+                    // active nav item
+                    $(".category-nav-link").closest("li").removeClass("active");
+                    $(".category-nav-link[href='#" + categoryLists[i].id + "']").closest("li").addClass("active");
+                    lastActiveNavID = categoryLists[i].id;
+                }
+                break;
+            }
+        }
     };
     $(window).scroll(move);
+
     move();
+
+    $(document).on('click', 'a.category-nav-link', function (event) {
+        console.log(11111);
+        event.preventDefault();
+
+        var href = $.attr(this, 'href');
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 10
+        }, 500, function () {
+            window.location.hash = href;
+        });
+    });
 
     // Product Item
     // --------------
@@ -209,16 +248,11 @@ $(document).ready(function () {
             // load data from db
             ProductCategorys.fetch({reset: true});
 
-            // add
-            setTimeout(function timeout() {
-                $('body').scrollspy({target: '#product-category-nav'})
-            }, 1500);
-
         },
 
         // add one category nav
         addOneCategoryNav: function (item) {
-            var view = new ProductCategoryNavView({model: item});
+            var view = new ProductCategoryNavView({model: item, className: item.id == 1 ? "active" : ""});
             this.categoryNavContainer.append(view.render().el);
         },
 

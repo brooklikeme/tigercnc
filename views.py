@@ -15,8 +15,20 @@ from .models import *
 def store(request):
     return render(request, 'store/store.html')
 
-def ProductDetail(request, pk):
-    return render(request, 'store/product_detail.html')
+class ProductDetail(generic.DetailView):
+    model = Product
+    template_name = 'store/product_detail.html'
+
+class CreateProduct(generic.CreateView):
+    model = Product
+    template_name = 'store/product_update.html'
+
+class UpdateProduct(generic.UpdateView):
+    model = Product
+    success_url = "#"
+    fields = ['name', 'subtitle', 'product_category', 'purchase_url', 'spec1_name',
+              'spec1_options', 'use_spec2', 'spec2_name', 'spec2_options', 'spec_price', 'body', 'images', 'related']
+    template_name = 'store/product_update.html'
 
 def ProductEdit(request, pk):
     return render(request, 'store/product_edit.html')

@@ -1,0 +1,735 @@
+{% extends "base.html" %}
+
+{% load i18n staticfiles cms_tags menu_tags sekizai_tags widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+        <form id="product-form" action="" method="post">{% csrf_token %}
+            <div class="item-top-placeholder tc-positon-relative tc-width-full">
+                <div id="scroller-anchor"></div>
+                <div class="item-top-fixed col-xs-24 tc-border-bottom-grey-1">
+                    <div class="col-xs-24 col-sm-12 item-sections">
+                        <ul class="tc-float-left">
+                            <li class="active">
+                                <a href="#product-detail-overview">
+                                <span>
+                                    概览
+                                </span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="#product-detail-body">
+                                <span>
+                                    介绍
+                                </span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="#product-detail-recommand">
+                                <span>
+                                    推荐
+                                </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="item-reviews col-xs-24 col-sm-12 tc-margin-top-2">
+                        <ul class="tc-float-right">
+                            <li class="">
+                                <input class="btn btn-primary btn-sm" type="submit" value="保存"/>
+                            </li>
+                            <li class="">
+                                <a class="btn btn-default btn-sm" href="#">
+                                <span>
+                                    结束编辑
+                                </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="product-detail-overview" class="col-xs-24 col-sm-15 product-img-box">
+                <div class="col-xs-24 col-sm-15 product-img-box">
+                    <div id="product-main-img" class="tc-margin-bottom-4">
+                        <img src="{{ product.thumbnail_url }}" alt class="img-responsive">
+                    </div>
+                    <div id="product-slideshow-box"
+                         class="tc-positon-relative tc-width-full tc-margin-top-4 tc-margin-bottom-4">
+                        <div id="product-slideshow-left-arrow"
+                             class="tc-display-block tc-position-left tc-position-absolute enabled"></div>
+                        <div id="product-slideshow-right-arrow"
+                             class="tc-display-block tc-position-right tc-position-absolute enabled"></div>
+                        <div id="product-slideshow-wrapper" class="tc-block-center tc-overflow-hidden">
+                            <div id="product-slideshow-container"
+                                 class="tc-position-relative tc-overflow-hidden tc-block-center">
+                                <div id="product-slideshow-strip"
+                                     class="tc-height-full tc-position-top tc-position-absolute">
+                                    {% for image in product.images.all %}
+                                        <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1"
+                                           image-url="{{ image.thumbnail_url }}">
+                                            <img src="{{ image.thumbnail_url }}" alt class="img-responsive"/>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Large modal -->
+                <div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                     aria-labelledby="myLargeModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h6 class="modal-title" id="myLargeModalLabel">选择图片或视频</h6>
+                            </div>
+                            <div class="modal-body">
+                                <div class="image-selector tc-width-full tc-border-grey-1">
+                                    <div class="image-selector-left">
+                                        <div class="image-select-left-top tc-border-bottom-grey-1 text-center">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-default dropdown-toggle btn-sm"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    目录管理
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li class="disabled"><a href="#">重命名</a></li>
+                                                    <li><a href="#">删除目录</a></li>
+                                                    <li><a href="#">新建目录</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group">
+                                            <a href="#" class="list-group-item"><span class="badge">18</span>全部</a>
+                                            <a href="#" class="list-group-item"><span class="badge">16</span>全部图片</a>
+                                            <a href="#" class="list-group-item"><span class="badge">2</span>全部视频</a>
+                                            <a href="#" class="list-group-item"><span class="badge">3</span>未分组</a>
+                                            <hr/>
+                                            <a href="#" class="list-group-item"><span class="badge">5</span>自定义分组1</a>
+                                            <a href="#" class="list-group-item"><span class="badge">0</span>自定义分组2</a>
+                                        </ul>
+                                    </div>
+                                    <div class="image-selector-right tc-border-left-grey-1">
+                                        <div class="folder-options tc-width-full tc-border-bottom-grey-1">
+                                            <span class="tc-display-inlineblock col-md-3 hidden-xs hidden-sm">全部图片</span>
+                                            <div class="btn-group  col-md-9 col-sm-16 hidden-xs" role="group">
+                                                <div class="checkbox tc-display-inlineblock tc-float-left">
+                                                    <label>
+                                                        <input type="checkbox" value="">全选
+                                                    </label>
+                                                </div>
+                                                <a class="btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
+                                                   href="#">
+                                                    移动目录
+                                                </a>
+                                                <a class="btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
+                                                   href="#">
+                                                    删除图片
+                                                </a>
+                                            </div>
+                                            <span class="col-md-4 col-md-offset-4 hidden-xs hidden-sm">图片大小不超过5M</span>
+                                            <div class="folder-option-upload col-md-4 col-sm-8 col-xs-24">
+                                                <a class="btn btn-primary btn-sm tc-margin-right-1 tc-margin-left-1 tc-margin-top-1 tc-float-right"
+                                                   href="#">
+                                                    上传图片
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="image-list-container">
+                                            <div class="image-list tc-width-full">
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-item col-xs-12 col-sm-8 col-md-6 col-lg-4">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive">
+                                                        </a>
+                                                    </div>
+                                                    <div class="image-checkbox tc-border-grey-1">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" value="">封面.png
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="image-actions tc-border-grey-1">
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-edit"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-exchange"></span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-8">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="image-list-pagination col-xs-24 tc-width-full tc-border-top-grey-1">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="image-selected tc-width-full tc-border-grey-1 tc-margin-top-1 tc-positon-relative">
+                                    <div class="image-selected-title tc-border-right-grey-1 tc-background-grey">
+                                        <span class="tc-display-block tc-margin-top-3 tc-margin-left-3">已选图片</span>
+                                    </div>
+                                    <div class="image-selected-strip-container">
+                                        <div class="image-selected-strip">
+                                            <ul id="sortable">
+                                                <li class="ui-state-default">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive tc-cursor-move">
+                                                        </a>
+                                                    </div>
+                                                    <div class="selected-image-actions">
+                                                        <div class="col-xs-18 text-left">
+                                                            <span>封面.png</span>
+                                                        </div>
+                                                        <div class="col-xs-6 text-right">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="ui-state-default">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive tc-cursor-move">
+                                                        </a>
+                                                    </div>
+                                                    <div class="selected-image-actions">
+                                                        <div class="col-xs-18 text-left">
+                                                            <span>封面.png</span>
+                                                        </div>
+                                                        <div class="col-xs-6 text-right">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="ui-state-default">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive tc-cursor-move">
+                                                        </a>
+                                                    </div>
+                                                    <div class="selected-image-actions">
+                                                        <div class="col-xs-18 text-left">
+                                                            <span>封面.png</span>
+                                                        </div>
+                                                        <div class="col-xs-6 text-right">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="ui-state-default">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive tc-cursor-move">
+                                                        </a>
+                                                    </div>
+                                                    <div class="selected-image-actions">
+                                                        <div class="col-xs-18 text-left">
+                                                            <span>封面.png</span>
+                                                        </div>
+                                                        <div class="col-xs-6 text-right">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="ui-state-default">
+                                                    <div class="image-thumbnail tc-border-grey-1">
+                                                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                                            <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
+                                                                 alt="" class="img-responsive tc-cursor-move">
+                                                        </a>
+                                                    </div>
+                                                    <div class="selected-image-actions">
+                                                        <div class="col-xs-18 text-left">
+                                                            <span>封面.png</span>
+                                                        </div>
+                                                        <div class="col-xs-6 text-right">
+                                                            <a href="#">
+                                                                <span class="icon fa fa-remove"></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+            <div class="col-xs-24 col-sm-9">
+                {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+                {#                {% for field in form %}#}
+                {#                    {{ field }}#}
+                {#                    {{ field.errors.as_text }}#}
+                {#                {% endfor %}#}
+
+                {#    fields = ['name', 'subtitle', 'product_category', 'purchase_url', 'spec1_name',#}
+                {#              'spec1_options', 'use_spec2', 'spec2_name', 'spec2_options', 'spec_price', 'body', 'images', 'related']#}
+
+                <div class="from-group tc-margin-bottom-3">
+                    <label class="field-title">标题：</label>
+                    {{ form.name|add_class:"form-control input-sm" }}
+                    <div class="form-group has-errors text-danger">
+                        {{ form.name.errors.as_text }}
+                    </div>
+                </div>
+                <div class="from-group tc-margin-bottom-3">
+                    <label class="field-title">副标题：</label>
+                    {{ form.subtitle|add_class:"form-control input-sm" }}
+                    <div class="form-group has-errors text-danger">
+                        {{ form.subtitle.errors.as_text }}
+                    </div>
+                </div>
+                <div class="from-group tc-margin-bottom-3">
+                    <label class="field-title">分类：</label>
+                    {{ form.product_category|add_class:"form-control" }}
+                    <div class="form-group has-errors text-danger">
+                        {{ form.product_category.errors.as_text }}
+                    </div>
+                </div>
+                <div class="from-group tc-margin-bottom-3">
+                    <label class="field-title">购买链接：</label>
+                    {{ form.purchase_url|add_class:"form-control input-sm" }}
+                    <div class="form-group has-errors text-danger">
+                        {{ form.purchase_url.errors.as_text }}
+                    </div>
+                </div>
+                <div class="from-group tc-margin-bottom-3">
+                    <label class="field-title">规格与价格：</label>
+                    <div class="row">
+                        <div class="col-xs-1">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="" checked disabled>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 spec-name">
+                            {{ form.spec1_name|add_class:"input-sm" }}
+                        </div>
+                        <div class="col-xs-17">
+                            <input id="product-spec1-options" value="{{ product.spec1_options }}"/>
+                            <input id="id_spec1_options" maxlength="255" name="spec1_options" type="hidden"
+                                   value="{{ product.spec1_options }}">
+                        </div>
+                    </div>
+                    <div class="form-group has-errors text-danger">
+                        {{ form.spec1_name.errors.as_text }}
+                        {{ form.spec1_options.errors.as_text }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-1">
+                            <div class="checkbox">
+                                <label>
+                                    {{ form.use_spec2 }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 spec-name">
+                            {{ form.spec2_name|add_class:"input-sm" }}
+                        </div>
+                        <div class="col-xs-17">
+                            <input id="product-spec2-options" value="{{ product.spec2_options }}"/>
+                            <input id="id_spec2_options" maxlength="255" name="spec2_options" type="hidden"
+                                   value="{{ product.spec2_options }}">
+                        </div>
+                    </div>
+                    <div class="form-group has-errors text-danger">
+                        {{ form.spec1_name.errors.as_text }}
+                        {{ form.spec1_options.errors.as_text }}
+                    </div>
+                </div>
+                <div class="from-group tc-margin-bottom-3">
+                    <input id="id_spec_price" name="spec_price" type="hidden" value="{{ product.spec_price }}">
+                    <table class="table table-condensed" id="product-price-table">
+                        <thead>
+                        <tr>
+                            <th id="spec1-name">{{ product.spec1_name }}</th>
+                            {% if product.use_spec2 %}
+                                <th id="spec2-name">{{ product.spec2_name }}</th>
+                            {% endif %}
+                            <th>价格</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {#                        {% for price in product.parse_spec_price %}#}
+                        {#                            <tr>#}
+                        {#                                <td>{{ price.spec1 }}</td>#}
+                        {#                                {% if product.use_spec2 %}#}
+                        {#                                    <td>{{ price.spec2 }}</td>#}
+                        {#                                {% endif %}#}
+                        {#                                <td>#}
+                        {#                                    <input class="spec-price-input" type="text" name="" value="{{ price.price }}">#}
+                        {#                                </td>#}
+                        {#                            </tr>#}
+                        {#                        {% endfor %}#}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="product-detail-body" class="col-xs-24">
+                <h3>商品介绍</h3>
+                <hr/>
+                <div class="btn-toolbar" data-role="editor-toolbar" data-target="#product-body">
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字大小"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-edit="fontSize 5" class="fs-Five">大</a></li>
+                            <li><a data-edit="fontSize 3" class="fs-Three btn-info">中</a></li>
+                            <li><a data-edit="fontSize 1" class="fs-One">小</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"
+                           title="文字高亮"><i class="fa fa-paint-brush"></i>&nbsp;<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <p>&nbsp;&nbsp;&nbsp;文字高亮:</p>
+                            <li><a data-edit="backColor #00FFFF">蓝</a></li>
+                            <li><a data-edit="backColor #00FF00">绿</a></li>
+                            <li><a data-edit="backColor #FF7F00">橙</a></li>
+                            <li><a data-edit="backColor #FF0000">红</a></li>
+                            <li><a data-edit="backColor #FFFF00">黄</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字颜色"><i class="fa fa-font"></i>&nbsp;<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <p>&nbsp;&nbsp;&nbsp;文字颜色:</p>
+                            <li><a data-edit="foreColor #000000">黑</a></li>
+                            <li><a data-edit="foreColor #0000FF">蓝</a></li>
+                            <li><a data-edit="foreColor #30AD23">绿</a></li>
+                            <li><a data-edit="foreColor #FF7F00">橙</a></li>
+                            <li><a data-edit="foreColor #FF0000">红</a></li>
+                            <li><a data-edit="foreColor #FFFF00">黄</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default" data-edit="bold" title="粗体 (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="italic" title="斜体 (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="strikethrough" title="删除线"><i class="fa fa-strikethrough"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="underline" title="下划线 (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default" data-edit="insertunorderedlist" title="列表"><i class="fa fa-list-ul"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="insertorderedlist" title="数字列表"><i class="fa fa-list-ol"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="outdent" title="减少缩进 (Shift+Tab)"><i class="fa fa-outdent"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="indent" title="增加缩进 (Tab)"><i class="fa fa-indent"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default" data-edit="justifyleft" title="左对齐 (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="justifycenter" title="中对齐 (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="justifyright" title="右对齐 (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="justifyfull" title="自适应 (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="超链接"><i class="fa fa-link"></i></a>
+                        <div class="dropdown-menu input-append">
+                            <input placeholder="URL" type="text" data-edit="createLink"/>
+                            <button class="btn btn-sm" type="button">添加链接</button>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default" data-edit="unlink" title="删除链接"><i class="fa fa-unlink"></i></a>
+                        <span class="btn btn-sm btn-default" title="Insert picture (or just drag & drop)" id="pictureBtn"> <i class="fa fa-picture-o"></i>
+						<input class="imgUpload" type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage"/>
+					</span>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-default" data-edit="undo" title="撤销 (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
+                        <a class="btn btn-sm btn-default" data-edit="redo" title="重做 (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+                    </div>
+                </div>
+                <div id="product-body" class="lead wysiwyg-editor" data-placeholder=""></div>
+                <div id="editorPreview"></div>
+                <input id="id_body" name="body" type="hidden" value="{{ product.body }}">
+            </div>
+            <div id="product-detail-recommand" class="col-xs-24">
+                <h3>为您推荐</h3>
+                <hr/>
+                {{ form.related }}
+            </div>
+        </form>
+    </div>
+
+    {% addtoblock "js" %}
+        <script src="{% static 'js/product_update.js' %}"></script>
+        <script src="{% static 'js/libs/jquery-ui.js' %}"></script>
+        <script src="{% static 'js/libs/jquery.tagsinput.min.js' %}"></script>
+        <script src="{% static 'sortedm2m/widget.js' %}"></script>
+        <script src="{% static 'js/libs/underscore.js' %}"></script>
+        <script src="{% static 'js/libs/jquery.hotkeys.js' %}"></script>
+        <script src="{% static 'js/libs/google-code-prettify/prettify.js' %}"></script>
+        <script src="{% static 'js/libs/bootstrap-wysiwyg.js' %}"></script>
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
+        <link rel="stylesheet" href="{% static 'css/items.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/product_update.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/libs/jquery-ui.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/libs/jquery.tagsinput.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'sortedm2m/widget.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/libs/bootstrap-wysiwyg.css' %}"/>
+    {% endaddtoblock %}
+
+{% endblock %}

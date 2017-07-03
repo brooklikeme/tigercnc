@@ -10,21 +10,21 @@
                 <div class="col-xs-24 col-sm-12 item-sections">
                     <ul class="tc-float-left">
                         <li class="active">
-                            <a href="#product-detail-overview">
+                            <a class="detail-anchor-nav" href="#product-detail-overview">
                                 <span>
                                     概览
                                 </span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="#product-detail-body">
+                            <a class="detail-anchor-nav" href="#product-detail-body">
                                 <span>
                                     介绍
                                 </span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="#product-detail-recommand">
+                            <a class="detail-anchor-nav" href="#product-detail-recommand">
                                 <span>
                                     推荐
                                 </span>
@@ -51,7 +51,7 @@
                             </a>
                         </li>
                         <li class="">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <a class="btn btn-primary btn-sm" href="/update_item/{{ product.id }}">
                                 <span class="icon fa fa-edit" aria-hidden="true"></span>
                                 <span>
                                     编辑
@@ -63,196 +63,115 @@
             </div>
         </div>
 
-        <div id="product-detail-overview" class="col-xs-24 col-sm-15 product-img-box">
-            <div id="product-main-img" class="tc-margin-bottom-4">
-                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                     alt="" class="img-responsive">
-            </div>
-            <div id="product-slideshow-box" class="tc-positon-relative tc-width-full tc-margin-top-4 tc-margin-bottom-4">
-                <div id="product-slideshow-left-arrow"
-                     class="tc-display-block tc-position-left tc-position-absolute enabled"></div>
-                <div id="product-slideshow-right-arrow"
-                     class="tc-display-block tc-position-right tc-position-absolute enabled"></div>
-                <div id="product-slideshow-wrapper" class="tc-block-center tc-overflow-hidden">
-                    <div id="product-slideshow-container"
-                         class="tc-position-relative tc-overflow-hidden tc-block-center">
-                        <div id="product-slideshow-strip"
-                             class="tc-height-full tc-position-top tc-position-absolute tc-overflow-hidden">
-                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/"
-                               class="slideshow-thumb tc-display-block tc-float-left tc-positon-relative tc-border-grey-1">
-                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                     alt="" class="img-responsive">
-                            </a>
-                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/"
-                               class="slideshow-thumb tc-display-block tc-float-left tc-positon-relative tc-border-grey-1">
-                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                     alt="" class="img-responsive">
-                            </a>
-                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/"
-                               class="slideshow-thumb tc-display-block tc-float-left tc-positon-relative tc-border-grey-1">
-                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                     alt="" class="img-responsive">
-                            </a>
-                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/"
-                               class="slideshow-thumb tc-display-block tc-float-left tc-positon-relative tc-border-grey-1">
-                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                     alt="" class="img-responsive">
-                            </a>
-                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/"
-                               class="slideshow-thumb tc-display-block tc-float-left tc-positon-relative tc-border-grey-1">
-                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                     alt="" class="img-responsive">
-                            </a>
+        <div id="product-detail-overview" class="detail-anchor tc-width-full">
+            <div class="col-xs-24 col-sm-15 product-img-box">
+                <div id="product-main-img" class="tc-margin-bottom-4">
+                    <img src="{{ product.thumbnail_url }}" alt class="img-responsive">
+                </div>
+                <div id="product-slideshow-box"
+                     class="tc-positon-relative tc-width-full tc-margin-top-4 tc-margin-bottom-4">
+                    <div id="product-slideshow-left-arrow"
+                         class="tc-display-block tc-position-left tc-position-absolute enabled"></div>
+                    <div id="product-slideshow-right-arrow"
+                         class="tc-display-block tc-position-right tc-position-absolute enabled"></div>
+                    <div id="product-slideshow-wrapper" class="tc-block-center tc-overflow-hidden">
+                        <div id="product-slideshow-container"
+                             class="tc-position-relative tc-overflow-hidden tc-block-center">
+                            <div id="product-slideshow-strip"
+                                 class="tc-height-full tc-position-top tc-position-absolute">
+                                {% for image in product.images.all %}
+                                    <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1"
+                                        image-url="{{ image.thumbnail_url }}">
+                                        <img src="{{ image.thumbnail_url }}" alt class="img-responsive"/>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xs-24 col-sm-9">
-            <div id="product-name">
-                <h3>TigerCNC虎式雕刻机套件</h3>
-            </div>
-            <div id="product-subtitle">
-                <h5>即装即用，包含所有所需硬件</h5>
-            </div>
-            <div id="product-price">
-                <span class="product-price-price">¥ 3349.00</span>
-                <span class="product-price-tiger">或 同等🐯豆  当前: </span>
-                <span class="product-price-price">100</span>
-                <a href="/products/" class="product-price-explain">
-                    <span class="icon fa fa-question-circle"></span>
-                </a>
-            </div>
-            <hr/>
-            <div id="spec1">
-                <h6>种类</h6>
-                <div id="spec1-options">
-                    <span class="spec-option selected">含主轴电机</span>
-                    <span class="spec-option">不含主轴电机</span>
+            <div class="col-xs-24 col-sm-9">
+                <div id="product-name">
+                    <h3>{{ product.name }}</h3>
+                </div>
+                <div id="product-subtitle">
+                    <h5>{{ product.subtitle }}</h5>
+                </div>
+                <div id="product-price" spec-price="{{ product.spec_price }}">
+                    <span class="product-price-price">¥ {{ product.low_price }}</span>
+                    <span class="product-price-tiger">或 同等🐯豆  当前: </span>
+                    <span class="my-tiger-beans">100</span>
+                    <a href="/products/" class="product-price-explain">
+                        <span class="icon fa fa-question-circle"></span>
+                    </a>
+                </div>
+                <hr/>
+                <div id="spec1">
+                    <h6>{{ product.spec1_name }}</h6>
+                    <div id="spec1-options">
+                        {% for option in product.split_spec1_options %}
+                            {% if forloop.counter != 1 %}
+                                <span class="spec-option">{{ option }}</span>
+                            {% else %}
+                                <span class="spec-option selected">{{ option }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div id="spec2">
+                    <h6>{{ product.spec2_name }}</h6>
+                    <div id="spec2-options">
+                        {% for option in product.split_spec2_options %}
+                            {% if forloop.counter != 1 %}
+                                <span class="spec-option">{{ option }}</span>
+                            {% else %}
+                                <span class="spec-option selected">{{ option }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div id="product-buy">
+                    <a href="{{ product.purchase_url }}" class="btn btn-primary btn-md" role="button">
+                        前往商城购买
+                    </a>
                 </div>
             </div>
-            <div id="spec2">
-                <h6>尺寸</h6>
-                <div id="spec2-options">
-                    <span class="spec-option selected">40x40</span>
-                    <span class="spec-option">40x80</span>
-                    <span class="spec-option">80x80</span>
-                    <span class="spec-option">80x120</span>
-                    <span class="spec-option">定制尺寸</span>
-                </div>
-            </div>
-            <div id="product-buy">
-                <a href="/" class="btn btn-primary btn-md" role="button">
-                    前往商城购买
-                </a>
-            </div>
         </div>
-        <div id="product-detail-body" class="col-xs-24">
+        <div id="product-detail-body" class="detail-anchor col-xs-24">
             <h3>商品介绍</h3>
             <hr/>
             <div class="product-body col-xs-24 col-md-15">
-                <p>
-                    CNC是计算机数字控制（Computer numerical
-                    control）的简称，是一种由计算机软件控制的自动化机床系统。广义上，CNC雕刻机、激光切割机、电火花切割机、线切割机等，均属于CNC的范畴，这里我们主要指的是用途最为广泛的CNC雕刻机。
-                </p>
-                <p>
-                    CNC雕刻机执行设计、编制好的指令动作，通过刀具（铣刀）将毛坯料（金属、木材、塑料等）加工成半成品或成品零件。我们身边用到和看到的很多家具、装饰品、工艺品、玩具都是出自CNC之手。当然，相比注塑、铸造这些制造方法，CNC的成本还是较高的，做出来的东西精度也更高。
-                </p>
-                <p>
-                    CNC技术在上世纪40年代萌芽，在工业生产中应用极广。而近些年随着开源硬件、创客运动在世界范围内的兴起，涌现出越来越多的桌面级、家用级CNC雕刻机硬件与软件。而CNC雕刻机也越来越成为DIY爱好者不可或缺的工具。
-                    了解更多CNC发展历史与基本知识
-                </p>
+                {{ product.body | safe }}
             </div>
         </div>
-        <div id="product-detail-recommand" class="col-xs-24">
+        <div id="product-detail-recommand" class="detail-anchor col-xs-24 tc-margin-bottom-4">
             <h3>为您推荐</h3>
             <hr/>
-            <div class="item-box col-xs-12 col-md-6">
-                <div class="item-img">
-                    <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                        <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                             alt="" class="img-responsive">
-                    </a>
-                    <div class="item-tags">
-                        <span class="item-tag-price">¥ 3099.00 起</span>
-                        <span class="item-tag-featured">推荐商品</span>
-                    </div>
-                </div>
-                <div class="item-info">
-                    <div class="item-name">
-                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                            TigerCNC虎式雕刻机套件虎式雕刻机套件虎式雕刻机套件
+            {% for related_product in product.related.all|slice:":4" %}
+                <div class="item-box col-xs-12 col-md-6">
+                    <div class="item-img">
+                        <a href="/products/{{ related_product.id }}">
+                            <img src="{{ related_product.thumbnail_url }}" alt class="img-responsive">
                         </a>
+                        <div class="item-tags">
+                            <span class="item-tag-price">¥ {{ related_product.low_price }} 起</span>
+                            {% if related_product.is_featured %}
+                                <span class="item-tag-featured">推荐商品</span>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="item-subtitle">
-                        <span>即装即用，包含所有所需硬件机套件虎式雕刻机套件虎式雕刻机套件</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item-box col-xs-12 col-md-6">
-                <div class="item-img">
-                    <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                        <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                             alt="" class="img-responsive">
-                    </a>
-                    <div class="item-tags">
-                        <span class="item-tag-price">¥ 3099.00 起</span>
-                    </div>
-                </div>
-                <div class="item-info">
-                    <div class="item-name">
-                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                            TigerCNC虎式雕刻机套件虎式雕刻机套件虎式雕刻机套件
-                        </a>
-                    </div>
-                    <div class="item-subtitle">
-                        <span>即装即用，包含所有所需硬件机套件虎式雕刻机套件虎式雕刻机套件</span>
+                    <div class="item-info">
+                        <div class="item-name">
+                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
+                                {{ related_product.name }}
+                            </a>
+                        </div>
+                        <div class="item-subtitle">
+                            <span>{{ related_product.subtitle }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="item-box col-xs-12 col-md-6">
-                <div class="item-img">
-                    <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                        <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                             alt="" class="img-responsive">
-                    </a>
-                    <div class="item-tags">
-                        <span class="item-tag-price">¥ 3099.00 起</span>
-                    </div>
-                </div>
-                <div class="item-info">
-                    <div class="item-name">
-                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                            TigerCNC虎式雕刻机套件虎式雕刻机套件虎式雕刻机套件
-                        </a>
-                    </div>
-                    <div class="item-subtitle">
-                        <span>即装即用，包含所有所需硬件机套件虎式雕刻机套件虎式雕刻机套件</span>
-                    </div>
-                </div>
-            </div>
-            <div class="item-box col-xs-12 col-md-6">
-                <div class="item-img">
-                    <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                        <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                             alt="" class="img-responsive">
-                    </a>
-                    <div class="item-tags">
-                        <span class="item-tag-price">¥ 3099.00 起</span>
-                    </div>
-                </div>
-                <div class="item-info">
-                    <div class="item-name">
-                        <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                            TigerCNC虎式雕刻机套件虎式雕刻机套件虎式雕刻机套件
-                        </a>
-                    </div>
-                    <div class="item-subtitle">
-                        <span>即装即用，包含所有所需硬件机套件虎式雕刻机套件虎式雕刻机套件</span>
-                    </div>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 
