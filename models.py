@@ -4,12 +4,14 @@ import json
 from django.db import models
 from django.contrib.auth.models import User
 from sortedm2m.fields import SortedManyToManyField
+import django.utils.timezone as timezone
 
 # ImageFolder
 class ImageFolder(models.Model):
     user = models.ForeignKey(User)
     name = models.CharField(max_length=45)
     parent = models.ForeignKey('self', null=True, blank=True)
+
     def __unicode__(self):
         return u'%s' % (self.name)
 
@@ -25,8 +27,9 @@ class Image(models.Model):
     thumbnail_url = models.URLField()
     is_video = models.BooleanField(default=False)
     video_html = models.CharField(max_length=255, null=True, blank=True)
-    create_time = models.DateTimeField()
-    update_time = models.DateTimeField()
+    imagefolder = models.ForeignKey(ImageFolder, null=True, db_index=True)
+    create_time = models.DateTimeField(default = timezone.now)
+    update_time = models.DateTimeField(auto_now=True)
     delete_time = models.DateTimeField()
     def __unicode__(self):
         return u'%s' % (self.name)
@@ -60,8 +63,8 @@ class Product(models.Model):
     view_count = models.IntegerField(default=0)
     low_price = models.PositiveIntegerField(default=100, db_index=True)
     high_price = models.PositiveIntegerField(default=100)
-    create_time = models.DateTimeField()
-    update_time = models.DateTimeField(db_index=True)
+    create_time = models.DateTimeField(default = timezone.now)
+    update_time = models.DateTimeField(db_index=True, auto_now=True)
     delete_time = models.DateTimeField(null=True)
     publish_time = models.DateTimeField(null=True)
     create_user = models.ForeignKey(User, related_name='create_user')

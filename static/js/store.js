@@ -106,7 +106,7 @@ $(document).ready(function () {
         model: Product,
 
         // url
-        url: "/products"
+        url: "/api/products"
 
     });
 
@@ -216,7 +216,7 @@ $(document).ready(function () {
         model: ProductCategory,
 
         // url
-        url: "/product_categorys"
+        url: "/api/product_categorys"
 
     });
 

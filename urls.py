@@ -17,6 +17,8 @@ admin.autodiscover()
 router = routers.DefaultRouter()
 router.register(r'product_categorys', ProductCategoryViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'imagefolders', ImageFolderViewSet)
+router.register(r'images', ImageViewSet)
 
 urlpatterns = [
     # products: /product/
@@ -31,7 +33,7 @@ urlpatterns = [
     url(r'^avatar/', include('avatar.urls')),
     url(r'^profile/', include('userprofiles.urls')),
     url(r'^gallery/', include('imagestore.urls', namespace='imagestore')),
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

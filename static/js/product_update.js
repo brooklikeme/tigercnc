@@ -112,14 +112,15 @@ $(document).ready(function () {
 
     $('#product-main-img').click(function (e) {
         e.preventDefault();
-        $('#myModal').modal();
+        $('#image-filter').modal();
+        ImageControl.initUI();
     })
 
 
-    $("#sortable").sortable({
+    $("#selected-images-container").sortable({
         placeholder: "ui-state-highlight"
     });
-    $("#sortable").disableSelection();
+    $("#selected-images-container").disableSelection();
 
     // product image
     var imagePosition = 0;
