@@ -2,23 +2,101 @@
  * Created by josh on 17/6/16.
  */
 $(document).ready(function () {
+    var lastActiveNavID = "";
+
     var move = function () {
         var b = $(window).scrollTop();
         var d = $("#scroller-anchor").offset().top;
         var c = $(".item-top-fixed");
+        var e = $("#toolbar-scroller-anchor").offset().top;
+        var f = $(".btn-toolbar");
+        var offsetHeight = c.height();
         var parent_width = $(".item-top-placeholder").width();
+        var body_bottom = $("#product-body").offset().top + $("#product-body").height();
         if (b > d) {
             c.css({position: "fixed", top: "0px", width: parent_width + "px"})
         } else {
-            if (b <= d) {
-                c.css({position: "relative", top: "", width: ""})
+            c.css({position: "relative", top: "", width: ""})
+        }
+        if (b + offsetHeight > e && body_bottom - b > 200) {
+            f.css({position: "fixed", top: offsetHeight + "px", width: parent_width + "px"})
+        } else {
+            f.css({position: "relative", top: "", width: ""})
+        }
+
+        // active nav
+        var anchorLists = [];
+        $(".detail-anchor").each(function () {
+            anchorLists.push({
+                id: $(this).attr("id"),
+                top: $(this).offset().top
+            });
+        });
+
+        var areaTop;
+        var areaBottom;
+        for (var i = 0; i < anchorLists.length; i++) {
+            areaTop = i == 0 ? 0 : anchorLists[i].top - 80;
+            areaBottom = i == anchorLists.length - 1 ? 10000 : anchorLists[i + 1].top - 80;
+            if (b >= areaTop && b < areaBottom) {
+                if (lastActiveNavID != anchorLists[i].id) {
+                    // active nav item
+                    $(".detail-anchor-nav").closest("li").removeClass("active");
+                    $(".detail-anchor-nav[href='#" + anchorLists[i].id + "']").closest("li").addClass("active");
+                    lastActiveNavID = anchorLists[i].id;
+                }
+                break;
             }
         }
+
     };
     $(window).scroll(move);
     move();
 
-    $('#product-body').wysiwyg();
+    $(document).on('click', 'a.detail-anchor-nav', function (event) {
+        event.preventDefault();
+
+        var href = $.attr(this, 'href');
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 65
+        }, 500, function () {
+            window.location.hash = href;
+        });
+    });
+
+    function openImageFilter(emptySelected, callback) {
+        $('#image-filter').modal();
+        SelectedImages.reset({});
+        if (!emptySelected) {
+            $(".slideshow-thumb").each(function (index, el) {
+                SelectedImages.add(
+                    {
+                        id: parseInt($(el).attr('data-id')),
+                        name: $(el).attr('name'),
+                        is_video: $(el).attr('is-video') == "False" || $(el).attr('is-video') =="false" ? false : true,
+                        video_html: $(el).attr('video-html'),
+                        thumbnail_url: $(el).attr('thumbnail-url'),
+                        image_url: $(el).attr('image-url')
+                    });
+            });
+        }
+        ImageControl.initUI();
+        // confirm
+        $("#confirm-image-filter").unbind("click");
+        $("#confirm-image-filter").on("click", callback);
+    };
+
+    $('#product-body').wysiwyg({openImageDialog: function() {
+        openImageFilter(true, function () {
+            $('#product-body').focus();
+            // insert image
+            $(".ui-state-default").each(function (index, el) {
+                document.execCommand('InsertImage', false, $(el).attr('image-url'));
+            });
+            // hide modal window
+            $('#image-filter').modal('hide');
+        });
+    }});
     $('#product-body').append($("#id_body").val());
 
     var specPriceOrigin = $.parseJSON($("#id_spec_price").val());
@@ -112,15 +190,32 @@ $(document).ready(function () {
 
     $('#product-main-img').click(function (e) {
         e.preventDefault();
-        $('#image-filter').modal();
-        ImageControl.initUI();
+        openImageFilter(false, function () {
+            $("#product-slideshow-strip .slideshow-thumb").remove();
+            var template_html = $("#thumb-template").html();
+            var thumb_image_ids = [];
+            $(".ui-state-default").each(function (index, el) {
+                console.log($(el).attr('thumbnail_url'));
+                thumb_image_ids.push(parseInt($(el).attr('data-id')));
+                $("#product-slideshow-strip").append(_.template(template_html, {
+                    id: $(el).attr('data-id'),
+                    name: $(el).attr('name'),
+                    is_video: $(el).attr('is-video'),
+                    video_html: $(el).attr('video-html'),
+                    thumbnail_url: $(el).attr('thumbnail-url'),
+                    image_url: $(el).attr('image-url')
+                }));
+            });
+            // update thumb image ids
+            $("#id_images").val(thumb_image_ids.join(","));
+            // hide modal window
+            $('#image-filter').modal('hide');
+            // reset click functions
+            $(".slideshow-thumb").click(slideshowThumbClick);
+            $(".slideshow-thumb").first().click();
+        });
     })
 
-
-    $("#selected-images-container").sortable({
-        placeholder: "ui-state-highlight"
-    });
-    $("#selected-images-container").disableSelection();
 
     // product image
     var imagePosition = 0;
@@ -161,13 +256,26 @@ $(document).ready(function () {
 
     refreshImageArrowStatus();
 
-    $(".slideshow-thumb").click(function () {
+    function slideshowThumbClick() {
+        $(".slideshow-thumb").removeClass("selected");
+        $(this).addClass("selected");
+        $("#product-main-img").removeClass("thin");
         $("#product-main-img").removeClass("tall");
         $("#product-main-img").removeClass("wide");
-        $("#product-main-img img").attr("src", $(this).attr("image-url"));
-        var imgClass = ($("#product-main-img img").height() * 1.0 / $("#product-main-img img").width() > 0.75) ? 'tall' : 'wide';
+        var elImage = $("#product-main-img img");
+        elImage.attr("src", $(this).attr("image-url"));
+        $("#product-main-img").attr("is-video", $(this).attr("is-video"));
+        var heightWidthRatio = elImage.height() * 1.0 / elImage.width();
+        var imgClass = (heightWidthRatio > 0.75) ? 'tall' : 'wide';
+        if (heightWidthRatio < 0.75) {
+            $("#product-main-img").css("padding-bottom",  heightWidthRatio * 100 + "%")
+        } else {
+            $("#product-main-img").css("padding-bottom",  "75%")
+        }
         $("#product-main-img").addClass(imgClass);
-    });
+    }
+
+    $(".slideshow-thumb").click(slideshowThumbClick);
 
     $(".slideshow-thumb").first().click();
 
@@ -180,8 +288,13 @@ $(document).ready(function () {
         var specPriceObj = [];
         $("#product-price-table > tbody > tr").each(function (index, el) {
             var fields = $(el).find("td");
-            specPriceObj.push({"spec1": fields.eq(0).text(), "spec2": fields.eq(1).text(), "price": fields.eq(2).find("input").val()})
+            specPriceObj.push({
+                "spec1": fields.eq(0).text(),
+                "spec2": fields.eq(1).text(),
+                "price": fields.eq(2).find("input").val()
+            })
         });
+
         $("#id_spec_price").val(JSON.stringify(specPriceObj));
 
         // update body html
@@ -198,6 +311,11 @@ $(document).ready(function () {
         }
         // update hidden fields
         event.preventDefault();
+    });
+
+    // cancel
+    $("#cancel-image-filter").click(function () {
+        $('#image-filter').modal('hide');
     });
 
 })

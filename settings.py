@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.weixin',
+    'phonenumber_field',
     'avatar',
     'userprofiles',
     'cms',

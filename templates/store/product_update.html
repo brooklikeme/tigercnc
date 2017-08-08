@@ -11,21 +11,21 @@
                     <div class="col-xs-24 col-sm-12 item-sections">
                         <ul class="tc-float-left">
                             <li class="active">
-                                <a href="#product-detail-overview">
+                                <a class="detail-anchor-nav" href="#product-detail-overview">
                                 <span>
                                     概览
                                 </span>
                                 </a>
                             </li>
                             <li class="">
-                                <a href="#product-detail-body">
+                                <a class="detail-anchor-nav" href="#product-detail-body">
                                 <span>
                                     介绍
                                 </span>
                                 </a>
                             </li>
                             <li class="">
-                                <a href="#product-detail-recommand">
+                                <a class="detail-anchor-nav" href="#product-detail-recommand">
                                 <span>
                                     推荐
                                 </span>
@@ -41,7 +41,7 @@
                             <li class="">
                                 <a class="btn btn-default btn-sm" href="#">
                                 <span>
-                                    结束编辑
+                                    预览
                                 </span>
                                 </a>
                             </li>
@@ -50,10 +50,11 @@
                 </div>
             </div>
 
-            <div id="product-detail-overview" class="col-xs-24 col-sm-15 product-img-box">
+            <div id="product-detail-overview" class="detail-anchor tc-width-full">
                 <div class="col-xs-24 col-sm-15 product-img-box">
                     <div id="product-main-img" class="tc-margin-bottom-4">
                         <img src="{{ product.thumbnail_url }}" alt class="img-responsive">
+                        <span id="img-edit" class="tc-display-block"><i class="fa fa-edit"></i></span>
                     </div>
                     <div id="product-slideshow-box"
                          class="tc-positon-relative tc-width-full tc-margin-top-4 tc-margin-bottom-4">
@@ -67,11 +68,22 @@
                                 <div id="product-slideshow-strip"
                                      class="tc-height-full tc-position-top tc-position-absolute">
                                     {% for image in product.images.all %}
-                                        <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1"
-                                           image-url="{{ image.thumbnail_url }}">
-                                            <img src="{{ image.thumbnail_url }}" alt class="img-responsive"/>
+                                        <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1" data-id="{{ image.id }}" name="{{ image.name }}"
+                                           is-video="{{ image.is_video }}" video-html="{{ image.video_html }}"
+                                            thumbnail-url="{{ image.thumbnail_url }}" image-url="{{ image.image_url }}">
+                                            <img src="{{ image.thumbnail_url }}" alt class="img-responsive" title="{{ image.name }}"/>
                                         </a>
                                     {% endfor %}
+                                    <script type="text/template" id="thumb-template">
+                                        <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1" data-id="<%= id %>" name="<%= name %>"
+                                           is-video="<%= is_video %>" video-html="<%= video_html %>"
+                                           thumbnail-url="<%= thumbnail_url %>"
+                                           image-url="<%= image_url %>">
+                                            <img src="<%= thumbnail_url %>" alt class="img-responsive"
+                                                 title="<%= name %>"/>
+                                        </a>
+                                    </script>
+                                    <input type="hidden" id="id_images" name="images" value="{{ product.join_image_ids }}">
                                 </div>
                             </div>
                         </div>
@@ -194,83 +206,103 @@
                     </table>
                 </div>
             </div>
-            <div id="product-detail-body" class="col-xs-24">
+            <div id="product-detail-body" class="detail-anchor col-xs-24">
                 <h3>商品介绍</h3>
                 <hr/>
-                <div class="btn-toolbar" data-role="editor-toolbar" data-target="#product-body">
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字大小"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a data-edit="fontSize 5" class="fs-Five">大</a></li>
-                            <li><a data-edit="fontSize 3" class="fs-Three btn-info">中</a></li>
-                            <li><a data-edit="fontSize 1" class="fs-One">小</a></li>
-                        </ul>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"
-                           title="文字高亮"><i class="fa fa-paint-brush"></i>&nbsp;<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <p>&nbsp;&nbsp;&nbsp;文字高亮:</p>
-                            <li><a data-edit="backColor #00FFFF">蓝</a></li>
-                            <li><a data-edit="backColor #00FF00">绿</a></li>
-                            <li><a data-edit="backColor #FF7F00">橙</a></li>
-                            <li><a data-edit="backColor #FF0000">红</a></li>
-                            <li><a data-edit="backColor #FFFF00">黄</a></li>
-                        </ul>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字颜色"><i class="fa fa-font"></i>&nbsp;<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <p>&nbsp;&nbsp;&nbsp;文字颜色:</p>
-                            <li><a data-edit="foreColor #000000">黑</a></li>
-                            <li><a data-edit="foreColor #0000FF">蓝</a></li>
-                            <li><a data-edit="foreColor #30AD23">绿</a></li>
-                            <li><a data-edit="foreColor #FF7F00">橙</a></li>
-                            <li><a data-edit="foreColor #FF0000">红</a></li>
-                            <li><a data-edit="foreColor #FFFF00">黄</a></li>
-                        </ul>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default" data-edit="bold" title="粗体 (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="italic" title="斜体 (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="strikethrough" title="删除线"><i class="fa fa-strikethrough"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="underline" title="下划线 (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default" data-edit="insertunorderedlist" title="列表"><i class="fa fa-list-ul"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="insertorderedlist" title="数字列表"><i class="fa fa-list-ol"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="outdent" title="减少缩进 (Shift+Tab)"><i class="fa fa-outdent"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="indent" title="增加缩进 (Tab)"><i class="fa fa-indent"></i></a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default" data-edit="justifyleft" title="左对齐 (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="justifycenter" title="中对齐 (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="justifyright" title="右对齐 (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="justifyfull" title="自适应 (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="超链接"><i class="fa fa-link"></i></a>
-                        <div class="dropdown-menu input-append">
-                            <input placeholder="URL" type="text" data-edit="createLink"/>
-                            <button class="btn btn-sm" type="button">添加链接</button>
+                <div class="toolbar-placeholder tc-positon-relative tc-width-full">
+                    <div id="toolbar-scroller-anchor"></div>
+                    <div class="btn-toolbar" data-role="editor-toolbar" data-target="#product-body">
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字大小"><i
+                                    class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a data-edit="fontSize 5" class="fs-Five">大</a></li>
+                                <li><a data-edit="fontSize 3" class="fs-Three btn-info">中</a></li>
+                                <li><a data-edit="fontSize 1" class="fs-One">小</a></li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default" data-edit="unlink" title="删除链接"><i class="fa fa-unlink"></i></a>
-                        <span class="btn btn-sm btn-default" title="Insert picture (or just drag & drop)" id="pictureBtn"> <i class="fa fa-picture-o"></i>
-						<input class="imgUpload" type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage"/>
-					</span>
-                    </div>
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-default" data-edit="undo" title="撤销 (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
-                        <a class="btn btn-sm btn-default" data-edit="redo" title="重做 (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"
+                               title="文字高亮"><i class="fa fa-paint-brush"></i>&nbsp;<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <p>&nbsp;&nbsp;&nbsp;文字高亮:</p>
+                                <li><a data-edit="backColor #00FFFF">蓝</a></li>
+                                <li><a data-edit="backColor #00FF00">绿</a></li>
+                                <li><a data-edit="backColor #FF7F00">橙</a></li>
+                                <li><a data-edit="backColor #FF0000">红</a></li>
+                                <li><a data-edit="backColor #FFFF00">黄</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="文字颜色"><i
+                                    class="fa fa-font"></i>&nbsp;<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <p>&nbsp;&nbsp;&nbsp;文字颜色:</p>
+                                <li><a data-edit="foreColor #000000">黑</a></li>
+                                <li><a data-edit="foreColor #0000FF">蓝</a></li>
+                                <li><a data-edit="foreColor #30AD23">绿</a></li>
+                                <li><a data-edit="foreColor #FF7F00">橙</a></li>
+                                <li><a data-edit="foreColor #FF0000">红</a></li>
+                                <li><a data-edit="foreColor #FFFF00">黄</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default" data-edit="bold" title="粗体 (Ctrl/Cmd+B)"><i
+                                    class="fa fa-bold"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="italic" title="斜体 (Ctrl/Cmd+I)"><i
+                                    class="fa fa-italic"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="strikethrough" title="删除线"><i
+                                    class="fa fa-strikethrough"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="underline" title="下划线 (Ctrl/Cmd+U)"><i
+                                    class="fa fa-underline"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default" data-edit="insertunorderedlist" title="列表"><i
+                                    class="fa fa-list-ul"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="insertorderedlist" title="数字列表"><i
+                                    class="fa fa-list-ol"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="outdent" title="减少缩进 (Shift+Tab)"><i
+                                    class="fa fa-outdent"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="indent" title="增加缩进 (Tab)"><i
+                                    class="fa fa-indent"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default" data-edit="justifyleft" title="左对齐 (Ctrl/Cmd+L)"><i
+                                    class="fa fa-align-left"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="justifycenter" title="中对齐 (Ctrl/Cmd+E)"><i
+                                    class="fa fa-align-center"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="justifyright" title="右对齐 (Ctrl/Cmd+R)"><i
+                                    class="fa fa-align-right"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="justifyfull" title="自适应 (Ctrl/Cmd+J)"><i
+                                    class="fa fa-align-justify"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" title="超链接"><i
+                                    class="fa fa-link"></i></a>
+                            <div class="dropdown-menu input-append">
+                                <input placeholder="URL" type="text" data-edit="createLink"/>
+                                <button class="btn btn-sm" type="button">添加链接</button>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default" data-edit="unlink" title="删除链接"><i
+                                    class="fa fa-unlink"></i></a>
+                            <a class="btn btn-sm btn-default" title="插入图片或视频" data-edit="insertImage"> <i
+                                    class="fa fa-picture-o"></i></a>
+                        </div>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-default" data-edit="undo" title="撤销 (Ctrl/Cmd+Z)"><i
+                                    class="fa fa-undo"></i></a>
+                            <a class="btn btn-sm btn-default" data-edit="redo" title="重做 (Ctrl/Cmd+Y)"><i
+                                    class="fa fa-repeat"></i></a>
+                        </div>
                     </div>
                 </div>
                 <div id="product-body" class="lead wysiwyg-editor" data-placeholder=""></div>
                 <div id="editorPreview"></div>
                 <input id="id_body" name="body" type="hidden" value="{{ product.body }}">
             </div>
-            <div id="product-detail-recommand" class="col-xs-24">
+            <div id="product-detail-recommand" class="detail-anchor col-xs-24">
                 <h3>为您推荐</h3>
                 <hr/>
                 {{ form.related }}

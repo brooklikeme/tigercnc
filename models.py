@@ -84,5 +84,8 @@ class Product(models.Model):
     def parse_spec_price(self):
         return json.loads(self.spec_price)
 
+    def join_image_ids(self):
+        return ','.join(map(str, self.images.values_list('id', flat=True)))
+
     def __unicode__(self):
         return u'%s' % (self.name)

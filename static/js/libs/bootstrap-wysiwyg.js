@@ -39,7 +39,10 @@
             selectionColor: "darkgrey",
             dragAndDropImages: false,
             keypressTimeout: 200,
-            fileUploadError: function( reason, detail ) { console.log( "File upload error", reason, detail ); }
+            fileUploadError: function( reason, detail ) { console.log( "File upload error", reason, detail ); },
+            openImageDialog: function () {
+                console.log("Open Insert Image Dialog");
+            },
         };
 
         var options = $.extend( true, {}, defaults, userOptions );
@@ -265,9 +268,10 @@
         toolbar.find( toolbarBtnSelector ).click( function() {
             self.restoreSelection(  );
             editor.focus();
-
             if ( editor.data( options.commandRole ) === "html" ) {
                 self.toggleHtmlEdit( editor );
+            } else if ($( this ).data( options.commandRole ) == "insertImage") {
+                options.openImageDialog();
             } else {
                 self.execCommand( $( this ).data( options.commandRole ), null, editor, options, toolbarBtnSelector );
             }

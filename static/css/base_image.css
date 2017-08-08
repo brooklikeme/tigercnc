@@ -3,6 +3,11 @@
     height: 45px;
     white-space: nowrap;
     overflow: hidden;
+    position: inherit;
+}
+
+.folder-options .btn-group {
+    position: inherit;
 }
 
 .folder-option-upload span {
@@ -77,6 +82,15 @@
 .image-actions span {
     color: #ccc;
     cursor: pointer;
+}
+
+.image-actions label {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.image-actions label > span {
+    color: #666;
 }
 
 .image-actions span:hover {
@@ -162,9 +176,9 @@
 #selected-images-container > li {
     margin: 5px;
     float: left;
-    width: 120px;
+    width: 108px;
     text-align: center;
-    height: 105px;
+    height: 108px;
 }
 
 .ui-state-highlight {
@@ -212,16 +226,26 @@
 }
 
 .selected-image-actions {
-    padding-top: 3px;
+    background-color: #fff;
+    position: relative;
+    height: 25px;
+}
+
+.selected-image-actions .unselect-image {
+    cursor: pointer;
+}
+
+.selected-image-actions span {
+    line-height: 28px;
 }
 
 #image-pagination-container {
-	float: right;
-	font-size: 12px;
+    float: right;
+    font-size: 12px;
 }
 
 #image-pagination-container ul {
-	margin-top: 10px;
+    margin-top: 10px;
     margin-right: 5px;
 }
 
@@ -246,3 +270,66 @@
     border-bottom: none;
 }
 
+.image-thumbnail {
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    padding-bottom: 75%;
+    border-bottom: none;
+}
+
+.image-thumbnail > img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.ui-state-default.video .image-thumbnail:before, .image-item.video .image-thumbnail:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    content: "\f01d";
+    font-family: FontAwesome;
+    font-size: 40px;
+    color: #fff;
+    opacity: .8;
+    text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.image-item .image-thumbnail:hover:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    content: "";
+    font-family: FontAwesome;
+    font-size: 40px;
+    color: #fff;
+    opacity: .8;
+    text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.5);
+    color: #eee;
+    z-index: 101;
+}
+
+.modal-actions {
+    height: 40px;
+    text-align: right;
+}
+
+.modal-actions .btn {
+    margin-top: 10px;
+    width: 70px;
+}
+
+#delete-images, #change-folder {
+    border-bottom: 1px solid #ccc;;
+}

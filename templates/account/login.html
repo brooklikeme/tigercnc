@@ -1,0 +1,73 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}新用户注册{% endblock %}
+{% block content %}
+    {% load staticfiles %}
+    <div class="container ">
+
+        <div class="well">
+
+            {% load socialaccount %}
+            {% providers_media_js %}
+
+            <a class="btn btn-block btn-social btn-weixin" href="{% provider_login_url "weixin" %}">
+                <span class="fa fa-weixin"></span> 使用微信登陆
+            </a>
+
+            <hr size="1" color="#DDDDDD" border="0" height="1px">
+        
+            <form class="login form-horizontal" method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                <div class="form-group">
+                    {{ form.login.errors }}
+                    <label for="inputDefault" class="col-lg-3 control-label">账号</label>
+
+                    <div class="col-lg-9">
+                        <input class="form-control" autofocus="autofocus" id="id_login" maxlength="30" name="login"
+                               placeholder="账号" type="text"/>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.errors }}
+                    <label for="inputDefault" class="col-lg-3 control-label">密码</label>
+
+                    <div class="col-lg-9">
+                        <input class="form-control" id="id_password" name="password" placeholder="密码" type="password"/>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    {{ form.remember.errors }}
+                    <label for="inputDefault" class="col-lg-3 control-label"></label>
+
+                    <div class="col-lg-9">
+                        <input id="id_remember" name="remember" type="checkbox"/> 记住我
+                    </div>
+
+                </div>
+
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                {% endif %}
+
+                <div class="form-group">
+
+                    <div class="col-lg-9 col-lg-offset-3">
+                        <button class="primaryAction btn btn-default btn-primary"
+                                type="submit">立即登陆</button>
+                        <a class="button btn btn-primary"
+                           href="{% url 'account_reset_password' %}">忘记登陆密码？</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

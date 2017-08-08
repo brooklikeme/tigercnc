@@ -49,16 +49,16 @@
                                 <div class="btn-group  col-md-9 col-sm-16 hidden-xs" role="group">
                                     <div class="checkbox tc-display-inlineblock tc-float-left">
                                         <label>
-                                            <input id="select-all-image" type="checkbox" value="">全选
+                                            <input id="check-all-images" type="checkbox" value="">全选
                                         </label>
                                     </div>
                                     <a id="change-folder"
-                                       class="btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
+                                       class="disabled btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
                                        href="#">
                                         移动目录
                                     </a>
                                     <a id="delete-images"
-                                       class="btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
+                                       class="disabled btn btn-default btn-sm tc-display-inlineblock tc-margin-left-1 tc-margin-top-1"
                                        href="#">
                                         删除图片
                                     </a>
@@ -84,7 +84,7 @@
                                         <div class="image-checkbox tc-border-grey-1">
                                             <div class="checkbox">
                                                 <label>
-                                                    <input class="" type="checkbox" value=""><%= name %>
+                                                    <input class="check-image" type="checkbox" value=""><%= name %>
                                                 </label>
                                             </div>
                                         </div>
@@ -118,43 +118,29 @@
                                 <ul id="selected-images-container">
                                     <script type="text/template" id="selected-image-template">
                                         <div class="image-thumbnail tc-border-grey-1">
-                                            <a href="">
-                                                <img src="<%= thumbnail_url %>" alt=""
-                                                     class="img-responsive tc-cursor-move">
-                                            </a>
+                                            <img src="<%= thumbnail_url %>" alt=""
+                                                 class="img-responsive tc-cursor-move">
                                         </div>
                                         <div class="selected-image-actions">
                                             <div class="col-xs-18 text-left">
                                                 <span><%= name %></span>
                                             </div>
                                             <div class="col-xs-6 text-right">
-                                                <a href="#">
-                                                    <span class="icon fa fa-remove"></span>
-                                                </a>
+                                                <span class="unselect-image icon fa fa-remove"></span>
                                             </div>
                                         </div>
                                     </script>
-                                    <li class="ui-state-default">
-                                        <div class="image-thumbnail tc-border-grey-1">
-                                            <a href="/wiki/tigercncruan-jian-an-zhuang-yu-shi-yong-shi-pin/">
-                                                <img src="https://dzevsq2emy08i.cloudfront.net/paperclip/collection_item_uploaded_images/586/small/IMG_9056.jpg?1489093690"
-                                                     alt="" class="img-responsive tc-cursor-move">
-                                            </a>
-                                        </div>
-                                        <div class="selected-image-actions">
-                                            <div class="col-xs-18 text-left">
-                                                <span>封面.png</span>
-                                            </div>
-                                            <div class="col-xs-6 text-right">
-                                                <a href="#">
-                                                    <span class="icon fa fa-remove"></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-actions">
+                        <a id="confirm-image-filter" class="btn btn-primary btn-sm">
+                            确认
+                        </a>
+                        <a id="cancel-image-filter" class="btn btn-default btn-sm">
+                            取消
+                        </a>
                     </div>
                 </div>
             </div><!-- /.modal-content -->

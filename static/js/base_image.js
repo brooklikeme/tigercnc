@@ -149,7 +149,7 @@ $(function () {
         // Re-render the list item.
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
-            if (this.model.get('reserved')){
+            if (this.model.get('reserved')) {
                 this.$el.addClass("reserved");
             }
             this.model.el = this;
@@ -200,7 +200,7 @@ $(function () {
 
         // Reserved Events
         events: {
-            "click .select-image": "selectImage",
+            "click .image-thumbnail": "selectImage",
         },
 
         // Reserved Initialization
@@ -242,7 +242,48 @@ $(function () {
 
         // update image
         initUpdate: function () {
+            var image = this.model;
+            var self = this;
 
+            // create editable
+            this.$(".update-image").editable({
+                unsavedclass: null,
+                type: 'video',
+                mode: 'popup',
+                title: '修改属性',
+                placement: 'right',
+                emptytext: '',
+                emptyclass: '',
+                value: {
+                    name: image.get('name'),
+                    is_video: image.get('is_video'),
+                    video_html: image.get('video_html')
+                },
+                validate: function (value) {
+                    if ($.trim(value.name) == '') {
+                        return '名称不能为空';
+                    }
+                },
+                success: function (response, newValue) {
+                    var isVideoChanged = newValue.is_video != image.get('is_video');
+                    image.save({name: newValue.name, is_video: newValue.is_video, video_html: newValue.video_html}, {
+                        patch: true,
+                        error: function (collection, response, options) {
+                            console.log(response.responseText);
+                        },
+                        success: function (model, response) {
+                            if (isVideoChanged) {
+                                Folders.fetch(
+                                    {
+                                        success: function (collection, response, options) {
+                                            ImageControl.selectLast();
+                                        }
+                                    })
+                            }
+                        },
+                    });
+                }
+            });
         },
 
         // change folder
@@ -252,7 +293,7 @@ $(function () {
 
             // init source
             var selectSource = [];
-            Folders.each(function(item) {
+            Folders.each(function (item) {
                 if (!item.get("reserved")) {
                     selectSource.push({value: item.get('id'), text: item.get('name')});
                 }
@@ -291,13 +332,25 @@ $(function () {
 
         // select image
         selectImage: function (ev) {
-            console.log("selectImage");
+            SelectedImages.add(
+                {
+                    id: this.model.get('id'),
+                    name: this.model.get('name'),
+                    is_video: this.model.get('is_video'),
+                    video_html: this.model.get('video_html'),
+                    thumbnail_url: this.model.get('thumbnail_url'),
+                    image_url: this.model.get('image_url')
+                });
         },
 
         // Re-render the list item.
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
             this.model.el = this;
+
+            if (this.model.get('is_video')) {
+                this.$el.addClass("video");
+            }
 
             // init actions
             this.initDelete();
@@ -368,24 +421,26 @@ $(function () {
 
         // Reserved Events
         events: {
-            "click .delete-selected-image": "deleteSelectedImage",
+            "click .unselect-image": "unselectImage",
         },
 
         // Reserved Initialization
         initialize: function () {
-            _.bindAll(this, '');
             this.model.bind('change', this.render, this);
             this.model.bind('remove', this.remove, this);
         },
 
-        // delete selected image
-        deleteSelectedImage: function (ev) {
-            console.log("deleteSelectedImage");
+        // un selected image
+        unselectImage: function (ev) {
+            SelectedImages.remove(this.model);
         },
 
         // Re-render the list item.
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
+            if (this.model.get('is_video')) {
+                this.$el.addClass("video");
+            }
             return this;
         },
 
@@ -407,7 +462,12 @@ $(function () {
     });
 
     // Define Selected Image List instance
-    var SelectedImages = new SelectedImageList;
+    window.SelectedImages = new SelectedImageList;
+    window.SelectedImages.on('reset', function (col, opts) {
+        _.each(opts.previousModels, function (model) {
+            model.trigger('remove');
+        });
+    });
 
     // Image Ctl View
     // **************
@@ -424,14 +484,12 @@ $(function () {
             "click #rename-folder:not(.disabled)": "renameFolder",
             "click #delete-folder:not(.disabled)": "deleteFolder",
             "click #create-folder": "createFolder",
-            "click #change-folder": "changeFolder",
-            "click #delete-images": "deleteImages",
-            "click #upload-images": "uploadImages",
-            "click #select-all-images": "selectAllImages",
-            "click tbody :checkbox": "checkOne",
-            "click thead :checkbox": "checkAll",
+            // "click #change-folder:not(.disabled)": "changeFolder",
+            // "click #delete-images:not(.disabled)": "deleteImages",
+            "click #upload-images:not(.disabled)": "uploadImages",
+            "click .check-image": "checkOneImage",
+            "click #check-all-images": "checkAllImages",
             "click .image-folder": "selectFolder",
-
         },
 
         // init
@@ -439,7 +497,7 @@ $(function () {
 
             // bind view to functions
             _.bindAll(this, 'addOneFolder', 'addOneImage', 'setSelected',
-                'fetchImages', 'selectLast', 'selectImage', 'initUI');
+                'fetchImages', 'selectLast', 'selectImage', 'initUI', 'initChangeFolder', 'initDeleteImages');
             // init variables
             this.renameFolderBtn = this.$("#rename-folder");
             this.deleteFolderBtn = this.$("#delete-folder");
@@ -449,13 +507,21 @@ $(function () {
             this.ImagesContainerReserve = this.$("#images-container-reserve");
             this.selectedImagesContainer = this.$("#selected-images-container");
             this.selectedFolderName = this.$("#selected-folder-name");
+            this.checkAllEl = this.$("#check-all-images");
+            this.checkedImageIDs = [];
 
             this.selectedFolderID = -8888;
+
+            this.selectedImagesContainer.sortable({
+                placeholder: "ui-state-highlight"
+            });
+            this.selectedImagesContainer.disableSelection();
 
             // init binding events
             Images.bind('reset', this.addAllImages, this);
             Folders.bind('reset', this.addAllFolders, this);
             Folders.bind('add', this.createOneFolder, this);
+            SelectedImages.bind('add', this.addOneSelectedImage, this);
 
         },
 
@@ -465,12 +531,14 @@ $(function () {
             Folders.fetch(
                 {
                     reset: true,
-                    success: function(collection, response, options) {
+                    success: function (collection, response, options) {
                         options.previousModels.forEach(function (item) {
                             item.el.remove();
                             item.el.unbind();
                         });
                         ImageControl.selectLast();
+                        ImageControl.initChangeFolder();
+                        ImageControl.initDeleteImages();
                     }
                 })
         },
@@ -518,11 +586,14 @@ $(function () {
                 this.renameFolderBtn.removeClass("disabled");
                 this.deleteFolderBtn.removeClass("disabled");
             }
+            this.checkAllEl.prop("checked", false);
+            this.$("#change-folder").addClass("disabled");
+            this.$("#delete-images").addClass("disabled");
 
             this.fetchImages(false, 1);
         },
 
-        fetchImages: function(switching, page) {
+        fetchImages: function (switching, page) {
             var self = this;
             // load images from DB
             var params = {
@@ -576,10 +647,10 @@ $(function () {
             }
         },
 
-        selectLast: function() {
+        selectLast: function () {
             var self = this;
             var foundLast = false;
-            self.$el.find(".image-folder").each(function(key, el) {
+            self.$el.find(".image-folder").each(function (key, el) {
                 if ($(el).attr("data-id") == self.selectedFolderID) {
                     foundLast = true;
                     self.setSelected($(el));
@@ -605,7 +676,7 @@ $(function () {
             ev.stopPropagation();
             var self = this;
             // find selected folder
-            Folders.each(function(item) {
+            Folders.each(function (item) {
                 if (item.get("id") == self.selectedFolderID) {
                     item.trigger("delete");
                 }
@@ -619,7 +690,7 @@ $(function () {
             ev.stopPropagation();
             var self = this;
             // find selected folder
-            Folders.each(function(item) {
+            Folders.each(function (item) {
                 if (item.get("id") == self.selectedFolderID) {
                     item.trigger("rename");
                 }
@@ -628,14 +699,114 @@ $(function () {
             $('.dropdown-toggle').closest(".btn-group").removeClass('in open');
         },
 
-        // change folder name
-        changeFolder: function (ev) {
+        // init change folder
+        initChangeFolder: function (ev) {
+            var self = this;
+
+            // init source
+            var selectSource = [];
+            Folders.each(function (item) {
+                if (!item.get("reserved")) {
+                    selectSource.push({value: item.get('id'), text: item.get('name')});
+                }
+            });
+            // create editable
+            this.$("#change-folder").editable({
+                unsavedclass: null,
+                type: 'select',
+                mode: 'popup',
+                title: '选择图片目录',
+                placement: 'bottom',
+                emptytext: '',
+                emptyclass: '',
+                prepend: '<无>',
+                source: selectSource,
+                display: false,
+                success: function (response, newValue) {
+                    var saveCount = 0;
+                    Images.forEach(function (item) {
+                        if (_.indexOf(self.checkedImageIDs, item.get("id")) > -1) {
+                            item.save({imagefolder: newValue}, {
+                                patch: true,
+                                error: function (collection, response, options) {
+                                    console.log(response.responseText);
+                                },
+                                success: function (model, response) {
+                                    saveCount++;
+                                    if (saveCount >= self.checkedImageIDs.length) {
+                                        Folders.fetch(
+                                            {
+                                                success: function (collection, response, options) {
+                                                    ImageControl.selectLast();
+                                                }
+                                            })
+                                    }
+                                },
+                            });
+                        }
+                    });
+                }
+            });
         },
 
-        // delete images
-        deleteImages: function (ev) {
-            // add new report
-            ReportCategorys.add({"name": "", order: 1});
+        // init delete images
+        initDeleteImages: function (ev) {
+            var self = this;
+
+            // init source
+            var selectSource = [];
+            Folders.each(function (item) {
+                if (!item.get("reserved")) {
+                    selectSource.push({value: item.get('id'), text: item.get('name')});
+                }
+            });
+            // create editable
+            this.$("#delete-images").editable({
+                unsavedclass: null,
+                type: 'confirm',
+                mode: 'popup',
+                title: '删除图片？',
+                savenochange: true,
+                placement: 'bottom',
+                emptytext: '',
+                emptyclass: '',
+                success: function (response, newValue) {
+                    var deleteCount = 0;
+                    Images.forEach(function (item) {
+                        if (_.indexOf(self.checkedImageIDs, item.get("id")) > -1) {
+                            var imageID = item.get("id");
+                            item.destroy({
+                                error: function (collection, response, options) {
+                                    console.log(response.responseText);
+                                },
+                                success: function (model, response) {
+                                    deleteCount++;
+                                    // delete selected image if needed
+                                    SelectedImages.forEach(function (selected_item) {
+                                        if (_.indexOf(imageID, selected_item.get("id")) > -1) {
+                                            selected_item.destroy({
+                                                error: function (collection, response, options) {
+                                                    console.log(response.responseText);
+                                                }
+                                            });
+                                        }
+                                    });
+                                    // refresh folder again
+                                    if (deleteCount >= self.checkedImageIDs.length) {
+                                        Folders.fetch(
+                                            {
+                                                success: function (collection, response, options) {
+                                                    ImageControl.selectLast();
+                                                }
+                                            })
+                                    }
+                                },
+
+                            });
+                        }
+                    });
+                }
+            });
         },
 
         // upload images
@@ -644,16 +815,65 @@ $(function () {
             ReportCategorys.add({"name": "", order: 1});
         },
 
-        // select all images
-        selectAllImages: function (ev) {
-            // add new report
-            ReportCategorys.add({"name": "", order: 1});
-        },
-
-        selectImage: function(image_id, image_name, thumbnail_url, image_url) {
+        selectImage: function (image_id, image_name, thumbnail_url, image_url) {
             this.selectedImagesContainer.append(this.newPlotTemplate({}));
         },
 
+        // add one selected image
+        addOneSelectedImage: function (item) {
+            var view = new SelectedImageView({model: item, attributes: {
+                "data-id": item.get('id'),
+                "name": item.get('name'),
+                "is-video": item.get('is_video'),
+                "video-html": item.get('video_html'),
+                "thumbnail-url": item.get('thumbnail_url'),
+                "image-url": item.get('image_url')
+            }});
+            this.selectedImagesContainer.append(view.render().el);
+        },
+
+        // check one image
+        checkOneImage: function (ev) {
+            if (this.checkAllEl.is(":checked") && !$(ev.target).is(':checked')) {
+                this.checkAllEl.prop('checked', false);
+            }
+
+            // update checked items
+            this.checkedImageIDs = [];
+            var self = this;
+            this.$('input.check-image:checkbox:checked').each(function (el) {
+                self.checkedImageIDs.push(parseInt($(this).closest(".image-item").attr("data-id")));
+            });
+            if (this.checkedImageIDs.length > 0) {
+                this.$("#change-folder").removeClass("disabled");
+                this.$("#delete-images").removeClass("disabled");
+            } else {
+                this.$("#change-folder").addClass("disabled");
+                this.$("#delete-images").addClass("disabled");
+            }
+        },
+
+        // check all images
+        checkAllImages: function (ev) {
+            if (this.checkAllEl.is(":checked")) {
+                this.$('input.check-image:checkbox').prop('checked', true);
+            } else {
+                this.$('input.check-image:checkbox').prop('checked', false);
+            }
+            // update checked items
+            this.checkedImageIDs = [];
+            var self = this;
+            this.$('input.check-image:checkbox:checked').each(function (el) {
+                self.checkedImageIDs.push(parseInt($(this).closest(".image-item").attr("data-id")));
+            });
+            if (this.checkedImageIDs.length > 0) {
+                this.$("#change-folder").removeClass("disabled");
+                this.$("#delete-images").removeClass("disabled");
+            } else {
+                this.$("#change-folder").addClass("disabled");
+                this.$("#delete-images").addClass("disabled");
+            }
+        },
     });
 
     // start Instance

@@ -2,7 +2,7 @@
 Vodeo editable input.
 Internally value stored as {name: "", is_video: false, video_html: ""}
 
-@class address
+@class video
 @extends abstractinput
 @final
 @example
@@ -99,8 +99,8 @@ $(function(){
              return;
            }
            this.$input.filter('[name="name"]').val(value.name);
-           this.$input.filter('[name="is-video"]').val(value.is_video);
-           this.$input.filter('[name="video-html"]').val(value.video-html);
+           this.$input.filter('[name="is-video"]').prop('checked', value.is_video);
+           this.$tpl.filter('.editable-video-html').find("textarea").val(value.video_html);
        },
 
        /**
@@ -111,8 +111,8 @@ $(function(){
        input2value: function() {
            return {
               name: this.$input.filter('[name="name"]').val(),
-              is_video: this.$input.filter('[name="is-video"]').val(),
-              video_html: this.$input.filter('[name="video-html"]').val()
+              is_video: this.$input.filter('[name="is-video"]').is(':checked'),
+              video_html: this.$tpl.filter('.editable-video-html').find("textarea").val()
            };
        },
 
@@ -140,13 +140,13 @@ $(function(){
     });
 
     Video.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        tpl: '<div class="editable-video"><label><span>City: </span><input type="text" name="city" class="input-small"></label></div>'+
-             '<div class="editable-video"><label><span>Street: </span><input type="text" name="street" class="input-small"></label></div>'+
-             '<div class="editable-video"><label><span>Building: </span><input type="text" name="building" class="input-mini"></label></div>',
+        tpl: '<div class="editable-video"><label><span>名称: </span><input type="text" name="name" class="input-small"></label></div>'+
+             '<div class="editable-video"><label><input type="checkbox" name="is-video"><span>是否视频</span></label></div>'+
+             '<div class="editable-video-html"><label><span>HTML: </span><textarea name="video-html" class="input-small" rows="2"/></label></div>',
 
         inputclass: ''
     });
 
-    $.fn.editabletypes.address = Address;
+    $.fn.editabletypes.video = Video;
 
 }(window.jQuery));

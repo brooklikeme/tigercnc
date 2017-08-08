@@ -81,7 +81,7 @@
                                  class="tc-height-full tc-position-top tc-position-absolute">
                                 {% for image in product.images.all %}
                                     <a class="slideshow-thumb tc-display-inlineblock tc-positon-relative tc-border-grey-1"
-                                        image-url="{{ image.thumbnail_url }}">
+                                        image-url="{{ image.thumbnail_url }}" is-video="{{ image.is_video }}" video-html="{{ image.video_html }}">
                                         <img src="{{ image.thumbnail_url }}" alt class="img-responsive"/>
                                     </a>
                                 {% endfor %}
@@ -101,7 +101,7 @@
                     <span class="product-price-price">¥ {{ product.low_price }}</span>
                     <span class="product-price-tiger">或 同等🐯豆  当前: </span>
                     <span class="my-tiger-beans">100</span>
-                    <a href="/products/" class="product-price-explain">
+                    <a href="/" class="product-price-explain">
                         <span class="icon fa fa-question-circle"></span>
                     </a>
                 </div>
@@ -150,7 +150,7 @@
             {% for related_product in product.related.all|slice:":4" %}
                 <div class="item-box col-xs-12 col-md-6">
                     <div class="item-img">
-                        <a href="/products/{{ related_product.id }}">
+                        <a href="/items/{{ related_product.id }}">
                             <img src="{{ related_product.thumbnail_url }}" alt class="img-responsive">
                         </a>
                         <div class="item-tags">
