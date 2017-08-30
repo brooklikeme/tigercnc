@@ -1,0 +1,26 @@
+.form-group.error:after {
+    font-size: 14px;
+    color: red;
+}
+
+#phone-input.error:after {
+    content: "请输入正确的手机号";
+
+}
+
+#email-input.error:after {
+    content: "请输入正确的邮箱地址";
+}
+
+#password1-input.error:after {
+    content: "密码长度6-16位，支持数字、字母、字符";
+}
+
+#password2-input.error:after {
+    content: "两次输入的密码不一致";
+}
+
+#code-input.error:after {
+    content: "验证码不正确";
+}
+

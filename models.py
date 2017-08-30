@@ -89,3 +89,32 @@ class Product(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.name)
+
+# SMS log
+class SmsLog(models.Model):
+    phone_num = models.CharField(db_index=True, max_length=11)
+    create_time = models.DateTimeField(db_index=True, default = timezone.now)
+    request_id = models.CharField(max_length=45, null=True)
+    business_id = models.CharField(max_length=45, null=True)
+    code = models.CharField(max_length=45, null=True)
+    message = models.CharField(max_length=255, null=True)
+    send_status = models.IntegerField(null=True)
+    error_code = models.CharField(max_length=45, null=True)
+    template_code = models.CharField(max_length=45, null=True)
+    content = models.CharField(max_length=255, null=True)
+    send_date = models.DateTimeField(null=True)
+    receive_date = models.DateTimeField(null=True)
+    out_id = models.CharField(max_length=45, null=True)
+    def __unicode__(self):
+        return u'%s' % (self.phone_num)
+
+
+# auth code
+class AuthCode(models.Model):
+    sms_log = models.ForeignKey(SmsLog)
+    auth_code = models.CharField(max_length=6)
+    phone_num = models.CharField(db_index=True, max_length=11)
+    create_time = models.DateTimeField(db_index=True, default = timezone.now)
+    verify_time = models.DateTimeField(null=True)
+    def __unicode__(self):
+        return u'%s' % (self.code)

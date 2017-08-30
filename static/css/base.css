@@ -3549,6 +3549,15 @@ textarea.input-lg {
     padding-right: 52.5px
 }
 
+.has-feedback-left .form-control-feedback {
+    left: 0px;
+}
+
+.has-feedback-left .form-control {
+    padding-right: 12px;
+    padding-left: 34px;
+}
+
 .form-control-feedback {
     position: absolute;
     top: 0;
@@ -3557,7 +3566,8 @@ textarea.input-lg {
     display: block;
     width: 42px;
     height: 42px;
-    line-height: 42px;
+    font-size: 20px;
+    line-height: 42px !important;
     text-align: center;
     pointer-events: none
 }

@@ -266,4 +266,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.permissions.AllowAny'],
 }
 
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

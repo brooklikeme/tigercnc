@@ -19,6 +19,7 @@ router.register(r'product_categorys', ProductCategoryViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'imagefolders', ImageFolderViewSet)
 router.register(r'images', ImageViewSet)
+router.register(r'send_auth_code', SendAuthCodeViewSet, 'sendautocode')
 
 urlpatterns = [
     # products: /product/

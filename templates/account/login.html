@@ -1,6 +1,6 @@
 {% extends "account/base.html" %}
 {% load i18n %}
-{% load account socialaccount %}
+{% load i18n account socialaccount staticfiles cms_tags menu_tags sekizai_tags %}
 
 {% block head_title %}新用户注册{% endblock %}
 {% block content %}
@@ -18,19 +18,20 @@
 
             <hr size="1" color="#DDDDDD" border="0" height="1px">
         
-            <form class="login form-horizontal" method="POST" action="{% url 'account_signup' %}">
+            <form class="login form-horizontal" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
 
                 {{ form.non_field_errors }}
 
                 <div class="form-group">
-                    {{ form.login.errors }}
                     <label for="inputDefault" class="col-lg-3 control-label">账号</label>
 
                     <div class="col-lg-9">
                         <input class="form-control" autofocus="autofocus" id="id_login" maxlength="30" name="login"
-                               placeholder="账号" type="text"/>
+                               placeholder="手机号/邮箱" type="text"/>
                     </div>
+                    {{ form.login.errors }}
+
 
                 </div>
 
@@ -70,4 +71,11 @@
             </form>
         </div>
     </div>
+
+    {% addtoblock "js" %}
+        <script src="{% static 'js/login.js' %}"></script>
+    {% endaddtoblock %}
+    {% addtoblock "css" %}
+        <link rel="stylesheet" href="{% static 'css/login.css' %}"/>
+    {% endaddtoblock %}
 {% endblock %}
